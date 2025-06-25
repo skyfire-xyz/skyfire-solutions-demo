@@ -9,49 +9,37 @@ This MCP Server has four tools -
 
 ## Getting Started
 
-- Set up CloudFlare R2 bucket to store dataset file:
-1. Login to Cloudflare dashboard 
-2. Navigate to R2, and select "Create Bucket". 
-3. Name your bucket and confirm creation. 
-
 - Set up an Ory account: 
-For creating an account and logging in, Ory is the default IAM being used in this demo.
+Ory is the default IAM being used in this demo. [Blog](https://www.ory.sh/blog/agentic-ai-security-mcp-oauth) to refer for more details on Ory + MCP integration.
+
+Steps to be followed for setting up Ory:
 1. Visit the [Ory Console](https://console.ory.sh)
 2. Create a new workspace
 3. Create a project in the new workspace
 4. Use the Project ID, Project Slug, API endpoints etc details from Project Settings tab in env variables.
 
-
 ## Installation
 
-1.  Clone the repository:
+1.  Install dependencies:
     ```bash
-    git clone <repository-url>
     cd carbonarc-seller-mcp-server
-    ```
-2.  Install dependencies:
-    ```bash
     npm install
     ```
+2. Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create seller account and seller services.
 3.  Set up environment variables:
     Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```
     # .env
-    ACCESS_KEY_ID=your_R2_access_key_id
-    ACCOUNT_ID=your_R2_access_id
-    SECRET_ACCESS_KEY=your_R2_secret_access_key
-    BUCKET_NAME=your_R2_bucket_name
     CARBONARC_SELLER_ID=your_seller_id
     CARBONARC_SELLER_SERVICE_ID=your_seller_service_id
-    JWKS_URL=https://api-qa.skyfire.xyz/.well-known/jwks.json
+    JWKS_URL=https://api.skyfire.xyz/.well-known/jwks.json
     ORY_API_KEY=your_ory_api_key
     ORY_PASSWORD=your_ory_password
     ORY_PROJECT_ID=your_ory_project_id
     SKYFIRE_API_KEY=your_carbonarc_seller_api_key
-    JWT_ISSUER=https://app-qa.skyfire.xyz/
-    SKYFIRE_API_BASE_URL=https://api-qa.skyfire.xyz
-    R2_BASE_URL=your_R2_base_url
+    JWT_ISSUER=https://app.skyfire.xyz/
+    SKYFIRE_API_BASE_URL=https://api.skyfire.xyz
     ```
 
 ## Run the development server:

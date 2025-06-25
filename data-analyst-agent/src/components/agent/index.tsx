@@ -18,7 +18,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { agentTypes, examplePrompts, ExamplePrompt } from "@/lib/types";
 
 export function AgentSandbox() {
-  const [inputs, setInputs] = useState<Record<string, string>>({"prompt": `Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.`});
+  const [inputs, setInputs] = useState<Record<string, string>>({"prompt": `Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset`});
   const [selectedExampleIndex, setSelectedExampleIndex] = useState<
     number | null
   >(null);

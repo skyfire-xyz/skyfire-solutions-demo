@@ -2,9 +2,9 @@
 
 This MCP Server has two tools - 
 1. retrieve-file-content: Retrieve the file contents from URL
-2. upload-csv: Imports csv dataset and summary for the retrieved dataset to google sheet in form of a presentation
+2. upload-csv: Imports csv dataset and summary for the retrieved dataset to google sheet in form of a presentation 
 
-## Getting Started
+## Getting Started (optional)
 
 - Set up a Google Apps Script:
 
@@ -49,18 +49,17 @@ function doPost(e) {
 6. Deploy:
 If you want to share your script or use it as a web app, you'll need to deploy it.
 
+## Note:
+Setting up Google Apps Script is only required for the flow wherein a presentation is created for the downloaded dataset using the upload-csv tool.
+
 ## Installation
 
-1.  Clone the repository:
+1.  Install dependencies:
     ```bash
-    git clone <repository-url>
     cd reporting-mcp-server
-    ```
-2.  Install dependencies:
-    ```bash
     npm install
     ```
-3.  Set up environment variables:
+2.  Set up environment variables:
     Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```

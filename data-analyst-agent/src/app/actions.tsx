@@ -54,9 +54,9 @@ const textConfig: {[key:string]: string} = {
   "download-dataset":
     "I will use CarbonArc's download-dataset tool to pay CarbonArc and get the download URL of the data",
   "retrieve-file-content":
-    "I will use Visulatisation's retrieve-file-content tool to get the data and create a brief summary",
+    "I will use Reporting's retrieve-file-content tool to get the data and create a brief summary",
   "upload-csv":
-    "I will use Visulatisation's upload-csv tool to upload csv data to Google Sheets and create a chart",
+    "I will use Reporting's upload-csv tool to upload csv data to Google Sheets and create a chart",
   "connect-mcp-server-tool": "Installing MCP server",
 };
 
@@ -113,7 +113,7 @@ export async function getAgent(
         {
           role: "system",
           content:
-            "You are a e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, stop the processing"
+            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, stop the processing"
         },
       ],
     };
@@ -135,7 +135,7 @@ async function runAgent(
   // eslint-disable-next-line prefer-const
   let allTools = await prepareAllTools(agentContext);
 
-  // add user promp to agentContext
+  // add user prompt to agentContext
   agentContext.conversation_history.push({
     role: "user",
     content: input,
@@ -155,7 +155,7 @@ async function runAgent(
     messages: agentContext.conversation_history,
   });
 
-  // Update agentconotext to include all the executed steps
+  // Update agentContext to include all the executed steps
   agentContext.conversation_history.push(...response.messages);
 
   // Format steps for display

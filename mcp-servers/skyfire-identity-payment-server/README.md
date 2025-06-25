@@ -1,7 +1,7 @@
 # Skyfire Identity & Payment MCP Server
 
 This MCP Server has one resource - 
-1. A guide explaining all the available tools and pre-requisite knowledge for LLM to understand the flow of calling tools.
+1. A guide which describes all the available tools and pre-requisite knowledge for LLM to understand the flow for calling various tools.
 
 This MCP Server also has three tools - 
 1. find-seller: Needs an input prompt to identify relevant sellers for. This tool returns seller details (seller name, sellerServiceId and MCP server URL). MCP server URL is not same as dataset URL
@@ -10,28 +10,26 @@ This MCP Server also has three tools -
 
 ## Getting Started
 
-- Use the Skyfire Setup Guide to create a seller account and a seller service
-- Run the CarbonArc MCP server locally. For demo, this is mocked inside find-seller tool, in real world, find-seller tool will call a registry to get the actual MCP server URL.  
+- Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create a seller account and seller service.
+- Run the CarbonArc Seller MCP server locally. 
+Note: 
+For this demo, Skyfire works a directory of services from which the CarbonArc MCP Server URL is fetched using find-seller tool. In the future, this could be any registry of services. The official Skyfire Identity & Payment MCP Server will use a resource to get the actual MCP server URL.
 
 ## Installation
 
-1.  Clone the repository:
+1.  Install dependencies:
     ```bash
-    git clone <repository-url>
     cd skyfire-identity-payment-mcp-server
-    ```
-2.  Install dependencies:
-    ```bash
     npm install
     ```
-3.  Set up environment variables:
+2.  Set up environment variables:
     Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```
     # .env
     CARBONARC_SELLER_SERVICE_ID=your_seller_service_id
-    SKYFIRE_API_BASE_URL=https://api-qa.skyfire.xyz
-    CARBONARC_MCP_SERVER_URL=<your_local_carbonarc_mcp_server_url>
+    SKYFIRE_API_BASE_URL=https://api.skyfire.xyz
+    CARBONARC_MCP_SERVER_URL=your_local_carbonarc_mcp_server_url
     ```
 
 ## Run the development server:
