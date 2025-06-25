@@ -31,9 +31,17 @@ Here is a diagram explaining the flow:
 
 ## Pre-requisites
 
-To run this demo please follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create Skyfire API key, complete Buyer and Seller Onboarding.
+To run this demo, 
+- Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create Skyfire API key, complete Buyer and Seller Onboarding.
 
-Refer to individual README files for installation steps and running commands.
+- Set up an Ory account: 
+Ory is the default IAM being used in this demo. [Blog](https://www.ory.sh/blog/agentic-ai-security-mcp-oauth) to refer for more details on Ory + MCP integration.
+
+Steps to be followed for setting up Ory:
+1. Visit the [Ory Console](https://console.ory.sh)
+2. Create a new workspace
+3. Create a project in the new workspace
+4. Use the Project ID, Project Slug, API endpoints etc details from Project Settings tab in env variables in [CarbonArc MCP Server](https://github.com/skyfire-xyz/skyfire-solutions-demo/tree/main/mcp-servers/carbonarc-seller-server).
 
 ## Contents: 
 
