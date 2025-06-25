@@ -1,4 +1,4 @@
-# Skyfire <> CarbonArc <> Reporting
+# Skyfire E2E Demo
 
 ## Pre-requisites
 To run this demo please follow the [Skyfire Platform Setup Guide](https://docs.google.com/document/d/1y0Z-Kf7JAue-N2aJR_AROtuXmoFqYNZQohczDLynwBo/edit?usp=sharing) to create account, create Skyfire API key, Buyer Onboarding, Seller Onboarding etc.
