@@ -1,8 +1,8 @@
-# Skyfire E2E Demo
+# Data Analyst Agent Demo
 
-## Task at hand
+This demo is designed to showcase end-to-end commerce flows using Skyfire technologies. It features a prompt-based AI agent interface that interacts with services via the Model Context Protocol (MCP) to simulate tool discovery, tool installation, and using the tools leveraging the Vercel AI SDK.
 
-In this demo, the agent has been tasked with purchasing -
+The agent has been tasked with purchasing -
 ```
 A dataset for pickup truck sales
 - Time period: 2024
