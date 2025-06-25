@@ -40,4 +40,4 @@ This MCP Server also has three tools -
 npm run dev
 ```
 
-The MCP server will run on [http://localhost:8788](http://localhost:8788).
+The MCP server will run on [http://localhost:8788/sse](http://localhost:8788/sse).

@@ -2,10 +2,6 @@
 
 This project is a Next.js application designed to demonstrate end-to-end commerce flows using Skyfire technologies. It features an AI agent interface that interacts with services via the Model Context Protocol (MCP) to simulate tasks like data discovery, verification, and purchasing, leveraging the Vercel AI SDK.
 
-## Prerequisites
-
-- Node.js (LTS version recommended - specific version not defined in project files)
-
 ## Installation
 
 1.  Clone the repository:

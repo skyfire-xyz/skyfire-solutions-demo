@@ -1,4 +1,4 @@
-# Reporting MCP Server
+# CarbonArc Seller MCP Server
 
 This MCP Server has four tools -
 
@@ -60,4 +60,4 @@ For creating an account and logging in, Ory is the default IAM being used in thi
 npm run dev
 ```
 
-The MCP server will run on [http://localhost:8789](http://localhost:8789).
+The MCP server will run on [http://localhost:8789/sse](http://localhost:8789/sse).

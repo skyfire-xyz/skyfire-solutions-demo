@@ -74,4 +74,4 @@ If you want to share your script or use it as a web app, you'll need to deploy i
 npm run dev
 ```
 
-The MCP server will run on [http://localhost:8790](http://localhost:8790).
+The MCP server will run on [http://localhost:8790/sse](http://localhost:8790/sse).
