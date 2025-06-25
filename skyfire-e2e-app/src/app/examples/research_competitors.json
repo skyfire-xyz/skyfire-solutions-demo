@@ -1,0 +1,69 @@
+{
+    "openapi": "3.1.1",
+    "info": {
+      "title": "BuildShip Tools API",
+      "version": "1.0.0",
+      "description": "API documentation for BuildShip tools."
+    },
+    "servers": [
+      {
+        "url": "https://rs367k.buildship.run",
+        "description": "BuildShip API server"
+      }
+    ],
+    "paths": {
+      "/executeWorkflow/s6bbUKyZjlWnlZW7oHcD/84ec04e9-e410-4ea1-a3b1-f2ed1aa1d0b3": {
+        "post": {
+          "summary": "Execute researchAnalyzeCompetitors Tool",
+          "description": "Research and analyze competitors by leveraging AI models to gather insights and generate reports based on the provided company name and context. It utilizes Perplexity AI for search capabilities and OpenAI for text generation to deliver comprehensive competitor analysis.",
+          "parameters": [
+            {
+              "in": "headers",
+              "name": "BUILDSHIP_API_KEY",
+              "description": "API key for authentication",
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "companyName": {
+                      "title": "Company Name",
+                      "type": "string",
+                      "properties": {}
+                    },
+                    "context": {
+                      "title": "Context",
+                      "type": "string",
+                      "properties": {}
+                    }
+                  }
+                },
+                "example": {
+                  "companyName": "Polkadot",
+                  "context": "Blockchain framework and cryptocurrency"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }

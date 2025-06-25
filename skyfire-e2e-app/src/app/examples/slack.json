@@ -1,0 +1,194 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://slack.com/api"
+    }
+  ],
+  "info": {
+    "contact": {
+      "name": "Slack developer relations",
+      "url": "https://api.slack.com/support"
+    },
+    "description": "One way to interact with the Slack platform is its HTTP RPC-based Web API, a collection of methods requiring OAuth 2.0-based user, bot, or workspace tokens blessed with related OAuth scopes.",
+    "title": "Slack Web API",
+    "version": "1.7.0",
+    "x-apisguru-categories": ["collaboration", "messaging"],
+    "x-logo": {
+      "url": "https://api.apis.guru/v2/cache/logo/http_static.tumblr.com_wvuzcz9_LlKncfhmp_slack_logo_240.png"
+    },
+    "x-origin": [
+      {
+        "format": "openapi",
+        "url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json",
+        "version": "3.0"
+      }
+    ],
+    "x-providerName": "slack.com"
+  },
+  "externalDocs": {
+    "description": "Learn more about the Slack Web API",
+    "url": "https://api.slack.com/web"
+  },
+  "tags": [],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "paths": {
+    "/users.lookupByEmail": {
+      "get": {
+        "description": "Find a user with an email address.",
+        "externalDocs": {
+          "description": "API method documentation",
+          "url": "https://api.slack.com/methods/users.lookupByEmail"
+        },
+        "operationId": "users_lookupByEmail",
+        "parameters": [
+          {
+            "description": "An email address belonging to a user in the workspace",
+            "in": "query",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "ok": true,
+                      "user": {
+                        "color": "9f69e7",
+                        "deleted": false,
+                        "has_2fa": false,
+                        "id": "W012A3CDE",
+                        "is_admin": true,
+                        "is_app_user": false,
+                        "is_bot": false,
+                        "is_owner": false,
+                        "is_primary_owner": false,
+                        "is_restricted": false,
+                        "is_ultra_restricted": false,
+                        "name": "spengler",
+                        "profile": {
+                          "avatar_hash": "ge3b51ca72de",
+                          "display_name": "spengler",
+                          "display_name_normalized": "spengler",
+                          "email": "spengler@ghostbusters.example.com",
+                          "image_192": "https://.../avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                          "image_24": "https://.../avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                          "image_32": "https://.../avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                          "image_48": "https://.../avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                          "image_512": "https://.../avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                          "image_72": "https://.../avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                          "real_name": "Egon Spengler",
+                          "real_name_normalized": "Egon Spengler",
+                          "status_emoji": ":books:",
+                          "status_text": "Print is dead",
+                          "team": "T012AB3C4"
+                        },
+                        "real_name": "Egon Spengler",
+                        "team_id": "T012AB3C4",
+                        "tz": "America/Los_Angeles",
+                        "tz_label": "Pacific Daylight Time",
+                        "tz_offset": -25200,
+                        "updated": 1502138686
+                      }
+                    }
+                  }
+                },
+                "schema": {
+                  "additionalProperties": true,
+                  "description": "Schema for successful response from users.lookupByEmail method",
+                  "properties": {
+                    "ok": {
+                      "$ref": "#/components/schemas/defs_ok_true"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/objs_user"
+                    }
+                  },
+                  "required": ["ok", "user"],
+                  "title": "users.lookupByEmail success schema",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Typical success response"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "error": "users_not_found",
+                      "ok": false
+                    }
+                  }
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Schema for error response from users.lookupByEmail method",
+                  "properties": {
+                    "callstack": {
+                      "description": "Note: PHP callstack is only visible in dev/qa",
+                      "type": "string"
+                    },
+                    "error": {
+                      "enum": [
+                        "users_not_found",
+                        "enterprise_is_restricted",
+                        "not_authed",
+                        "invalid_auth",
+                        "account_inactive",
+                        "no_permission",
+                        "invalid_arg_name",
+                        "invalid_array_arg",
+                        "invalid_charset",
+                        "invalid_form_data",
+                        "invalid_post_type",
+                        "missing_post_type",
+                        "team_added_to_org",
+                        "invalid_json",
+                        "json_not_object",
+                        "request_timeout",
+                        "upgrade_required",
+                        "fatal_error"
+                      ],
+                      "type": "string"
+                    },
+                    "ok": {
+                      "$ref": "#/components/schemas/defs_ok_false"
+                    }
+                  },
+                  "required": ["ok", "error"],
+                  "title": "users.lookupByEmail error schema",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Typical error response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [],
+            "slackAuth": ["users:read.email"]
+          }
+        ],
+        "tags": ["users"]
+      }
+    }
+  }
+}
