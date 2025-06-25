@@ -27,7 +27,7 @@ For this demo, Skyfire works a directory of services from which the CarbonArc MC
 - The buyer agent will use CarbonArc’s download-dataset tool to allow CarbonArc to collect the payment and ask for the downloaded dataset
 
 Here is a diagram explaining the flow:
-![WebSequence Flow Diagram](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/websequence_flow_diagram.png?raw=true)
+![WebSequence Flow Diagram](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/images/websequence_flow_diagram.png?raw=true)
 
 ## Pre-requisites
 
