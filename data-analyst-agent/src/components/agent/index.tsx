@@ -7,7 +7,7 @@ import {
   ActionButtons,
   InputPanel,
 } from "@/components/agent/agent-input-panel";
-import { SecretDialog } from "@/components/secret-dialog";
+// import { SecretDialog } from "@/components/secret-dialog";
 import { AgentHeader } from "@/components/agent/agent-header";
 import { OutputPanel } from "@/components/agent/agent-output-panel";
 import { MobileOutputPanel } from "@/components/agent/agent-mobile-output-panel";
@@ -32,7 +32,7 @@ export function AgentSandbox() {
     {}
   );
   const [outputDrawerOpen, setOutputDrawerOpen] = useState(false);
-  const [secretDialogOpen, setSecretDialogOpen] = useState(false);
+  // const [secretDialogOpen, setSecretDialogOpen] = useState(false);
   const { apiKey, agentContext, setAgentContext } = useApp();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -83,10 +83,10 @@ export function AgentSandbox() {
       return;
     }
 
-    if (!apiKey) {
-      setSecretDialogOpen(true);
-      return;
-    }
+    // if (!apiKey) {
+    //   setSecretDialogOpen(true);
+    //   return;
+    // }
 
     setLoading(true);
     setOutputDrawerOpen(true);
@@ -131,21 +131,21 @@ export function AgentSandbox() {
     }
   };
 
-  useEffect(() => {
-    if (!apiKey) {
-      setSecretDialogOpen(true);
-    }
-  }, [apiKey]);
+  // useEffect(() => {
+  //   if (!apiKey) {
+  //     setSecretDialogOpen(true);
+  //   }
+  // }, [apiKey]);
 
   return (
     <div className="flex flex-col h-screen overflow-x-hidden">
       <AgentHeader />
       
       <div className="flex-1 flex flex-col min-h-0 pb-4 bg-muted overflow-hidden relative">
-        <SecretDialog
+        {/* <SecretDialog
           open={secretDialogOpen}
           onOpenChange={setSecretDialogOpen}
-        />
+        /> */}
         <div className="flex-1 flex flex-col md:flex-row min-h-0 w-[calc(80vw-1rem)] lg:w-full py-2">
           {selectedAgentDetails && (
             <InputPanel

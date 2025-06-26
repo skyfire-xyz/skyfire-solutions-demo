@@ -27,8 +27,10 @@ This demo agent is available [here](https://data-analyst-agent-demo-74464367970.
     ```
     # .env
 
-    OPENAI_API_KEY=your_openai_api_key
-    SKYFIRE_MCP_URL=your_skyfire_mcp_server_url
+    OPENAI_API_KEY=
+    SKYFIRE_MCP_URL=
+    REPORTING_MCP_URL=
+    SKYFIRE_API_KEY=
     ```
 
 ## Getting Started

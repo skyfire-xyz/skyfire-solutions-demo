@@ -96,6 +96,11 @@ export async function getAgent(
   input: string | Record<string, string>,
   agentContext: AgentContext,
 ) {
+  console.log("apiKey", apiKey);
+  if(!apiKey)
+    apiKey = process.env.SKYFIRE_API_KEY || "";
+
+  console.log("apiKey", apiKey);
   // set default agent context having SKYFIRE and VISUALIZATION MCP servers
   if (!agentContext || Object.keys(agentContext).length === 0) {
     agentContext = {
