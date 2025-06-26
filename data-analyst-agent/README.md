@@ -16,7 +16,6 @@ Purchase a dataset for pickup truck sales
 
 1.  Install dependencies:
     ```bash
-    cd skyfire-e2e-app
     npm install
     ```
 2.  Set up environment variables:
@@ -24,11 +23,8 @@ Purchase a dataset for pickup truck sales
 
     ```
     # .env
-
-    # Required by AI SDK for the agent model
+    
     OPENAI_API_KEY=your_openai_api_key
-
-    # Required by the agent actions
     SKYFIRE_MCP_URL=your_skyfire_mcp_server_url
     ```
 

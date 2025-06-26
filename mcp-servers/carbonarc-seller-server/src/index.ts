@@ -2,10 +2,11 @@ import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { Hono } from "hono";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+// import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { env } from "cloudflare:workers";
-import { Configuration, FrontendApi, IdentityApi } from "@ory/client-fetch";
-import { jwtVerify, createRemoteJWKSet } from "jose";
+// import { Configuration, FrontendApi, IdentityApi } from "@ory/client-fetch";
+// import { jwtVerify, createRemoteJWKSet } from "jose";
+import { McpAccessControl } from "@ory/mcp-access-control";
 
 type Bindings = Env;
 
@@ -20,110 +21,169 @@ const oryApiKey = env.ORY_API_KEY;
 const oryProjectId = env.ORY_PROJECT_ID;
 const jwksUrl = env.JWKS_URL;
 
-// Initialize Ory clients
-const oryConfig = new Configuration({
-  basePath: `https://${oryProjectId}.projects.oryapis.com`,
-  accessToken: oryApiKey,
-  headers: {
-    Authorization: `Bearer ${oryApiKey}`,
-  },
+// Initialize Ory access control
+const accessControl = new McpAccessControl({
+  jwksUrl: env.JWKS_URL,
+  issuer: "https://app-qa.skyfire.xyz/",
+  audience: env.CARBONARC_SELLER_SERVICE_ID,
+  claimKey: "bid.skyfireEmail",
+  oryProjectUrl: `https://${oryProjectId}.projects.oryapis.com`,
+  oryApiKey: oryApiKey,
 });
 
-const frontendApi = new FrontendApi(oryConfig);
-const identityApi = new IdentityApi(oryConfig);
-let oryResponse: string;
+console.log("accessControl", accessControl);
 
-async function checkSession(sessionToken: string): Promise<boolean> {
-  try {
-    const response = await frontendApi.toSession({
-      xSessionToken: sessionToken,
-    });
-    return response.active === true;
-  } catch (error) {
-    console.error("Error checking session:", error);
-    return false;
-  }
-}
+const oryAccessControlTool = accessControl.getToolDefinition();
+console.log("oryAccessControlTool", JSON.stringify(oryAccessControlTool));
+
+
+// // Initialize Ory clients
+// const oryConfig = new Configuration({
+//   basePath: `https://${oryProjectId}.projects.oryapis.com`,
+//   accessToken: oryApiKey,
+//   headers: {
+//     Authorization: `Bearer ${oryApiKey}`,
+//   },
+// });
+
+// const frontendApi = new FrontendApi(oryConfig);
+// const identityApi = new IdentityApi(oryConfig);
+// let oryResponse: string;
+
+// async function checkSession(sessionToken: string): Promise<boolean> {
+//   try {
+//     const response = await frontendApi.toSession({
+//       xSessionToken: sessionToken,
+//     });
+//     return response.active === true;
+//   } catch (error) {
+//     console.error("Error checking session:", error);
+//     return false;
+//   }
+// }
+
+// const createAccountAndLoginWithOry = async (
+//   kyaToken: string,
+//   password: string
+// ) => {
+//   try {
+//     // Initialize JWKS client for token verification
+//     const JWKS = createRemoteJWKSet(new URL(jwksUrl));
+//     // Verify the KYA token
+//     const { payload } = await jwtVerify(kyaToken, JWKS, {
+//       issuer: env.JWT_ISSUER,
+//       audience: env.CARBONARC_SELLER_SERVICE_ID,
+//     });
+//     // Only for demo: randomised the email to create a new account in every run
+//     const skyfireEmail: string =
+//       Math.floor(Math.random() * 100000) + payload.bid.skyfireEmail;
+
+//     // Check if identity exists in Ory
+//     const identities = await identityApi.listIdentities({
+//       credentialsIdentifier: skyfireEmail,
+//     });
+
+//     let identityId: string;
+
+//     if (identities.length === 0) {
+//       // Create new identity if it doesn't exist
+//       const createResponse = await identityApi.createIdentity({
+//         createIdentityBody: {
+//           schema_id: "preset://email",
+//           traits: {
+//             email: skyfireEmail,
+//           },
+//           credentials: {
+//             password: {
+//               config: {
+//                 password: password,
+//               },
+//             },
+//           },
+//         },
+//       });
+
+//       identityId = createResponse.id;
+//       oryResponse = "Account created successfully. ";
+//     } else {
+//       identityId = identities[0].id;
+//       oryResponse = "Account already exists. ";
+//     }
+
+//     // Create login flow
+//     const loginFlow = await frontendApi.createNativeLoginFlow();
+
+//     // Complete login flow
+//     const loginResponse = await frontendApi.updateLoginFlow({
+//       flow: loginFlow.id,
+//       updateLoginFlowBody: {
+//         identifier: skyfireEmail,
+//         password: password,
+//         method: "password",
+//       },
+//     });
+
+//     // Get session token
+//     const sessionToken = loginResponse.session_token;
+
+//     return {
+//       content: [
+//         {
+//           type: "text",
+//           text: oryResponse + `Access token is: ${sessionToken}`,
+//         },
+//       ],
+//     };
+//   } catch (error: any) {
+//     console.log("Error in create-account:", JSON.stringify(error));
+//     return {
+//       content: [
+//         {
+//           type: "text",
+//           text: `Error in account creation: ${error.message}`,
+//         },
+//       ],
+//     };
+//   }
+// };
 
 const createAccountAndLoginWithOry = async (
   kyaToken: string,
   password: string
 ) => {
   try {
-    // Initialize JWKS client for token verification
-    const JWKS = createRemoteJWKSet(new URL(jwksUrl));
-    // Verify the KYA token
-    const { payload } = await jwtVerify(kyaToken, JWKS, {
-      issuer: env.JWT_ISSUER,
-      audience: env.CARBONARC_SELLER_SERVICE_ID,
+    const result = await oryAccessControlTool.handler({
+      token: kyaToken,
+      password: "123456S$d#d",
     });
-    // Only for demo: randomised the email to create a new account in every run
-    const skyfireEmail: string =
-      Math.floor(Math.random() * 100000) + payload.bid.skyfireEmail;
-
-    // Check if identity exists in Ory
-    const identities = await identityApi.listIdentities({
-      credentialsIdentifier: skyfireEmail,
-    });
-
-    let identityId: string;
-
-    if (identities.length === 0) {
-      // Create new identity if it doesn't exist
-      const createResponse = await identityApi.createIdentity({
-        createIdentityBody: {
-          schema_id: "preset://email",
-          traits: {
-            email: skyfireEmail,
+    if (result.success) {
+      console.log("result success", result);
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Authentication successful! accessToken is : ${result.session?.token}`,
           },
-          credentials: {
-            password: {
-              config: {
-                password: password,
-              },
-            },
-          },
-        },
-      });
-
-      identityId = createResponse.id;
-      oryResponse = "Account created successfully. ";
+        ],
+      };
     } else {
-      identityId = identities[0].id;
-      oryResponse = "Account already exists. ";
+      console.log("result failed", result);
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Authentication failed: ${result.error}`,
+          },
+        ],
+      };
     }
-
-    // Create login flow
-    const loginFlow = await frontendApi.createNativeLoginFlow();
-
-    // Complete login flow
-    const loginResponse = await frontendApi.updateLoginFlow({
-      flow: loginFlow.id,
-      updateLoginFlowBody: {
-        identifier: skyfireEmail,
-        password: password,
-        method: "password",
-      },
-    });
-
-    // Get session token
-    const sessionToken = loginResponse.session_token;
-
+  } catch (error) {
+    console.log("result catch", error);
     return {
       content: [
         {
           type: "text",
-          text: oryResponse + `Access token is: ${sessionToken}`,
-        },
-      ],
-    };
-  } catch (error: any) {
-    console.log("Error in create-account:", JSON.stringify(error));
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Error in account creation: ${error.message}`,
+          text: `Error: ${error}`,
         },
       ],
     };
@@ -139,6 +199,34 @@ export class MyMCP extends McpAgent<Bindings, State> {
       tools: {},
     },
   });
+
+    withAuth = (handler: Function) => {
+      return async function checkSession(params, context) {
+      
+        // call ORY to validate session 
+        const validationResult = await accessControl.validateSession(
+          { "x-session-token": params.accessToken },
+          { headerName: "x-session-token" }
+        );
+
+        console.log("validationResult", validationResult);
+
+        // Token validation Failure: return error to client 
+        if (!validationResult.isValid) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Unauthorized: ${validationResult.error}`,
+              },
+            ],
+          };
+        }
+
+        // Token validation Success: call tool business logic
+        return handler(params);
+      };
+  };
 
   // Initialize mock data
   dataset = {
@@ -210,9 +298,7 @@ export class MyMCP extends McpAgent<Bindings, State> {
           .string()
           .describe("Access token required to access and execute this tool"),
       },
-      async ({ accessToken }) => {
-        let isSessionValid = await checkSession(accessToken);
-        if (accessToken.length !== 0 && isSessionValid) {
+      this.withAuth(async ({ accessToken }) => {
           let response = `Following is the comma separated list of data available from seller ${this.dataset.skyfireReceiverUsername}. 
           Each entry has an id, title and size associated.`;
 
@@ -237,17 +323,8 @@ export class MyMCP extends McpAgent<Bindings, State> {
               },
             ],
           };
-        } else {
-          return {
-            content: [
-              {
-                type: "text",
-                text: "Signed up already? Sign in now to search the available datasets",
-              },
-            ],
-          };
-        }
-      }
+        
+      })
     );
 
     this.server.tool(
@@ -259,10 +336,7 @@ export class MyMCP extends McpAgent<Bindings, State> {
           .describe("Access token required to access and execute this tool"),
         dataset_id: z.number().describe("ID for chosen dataset"),
       },
-      async ({ accessToken, dataset_id }) => {
-        let isSessionValid = await checkSession(accessToken);
-
-        if (accessToken.length !== 0 && isSessionValid) {
+      this.withAuth(async ({ accessToken, dataset_id }) => {
           const res = this.dataset.data.filter((data) => {
             return data.dataId === dataset_id;
           });
@@ -275,17 +349,7 @@ export class MyMCP extends McpAgent<Bindings, State> {
               },
             ],
           };
-        } else {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Signed up already? Sign in now to get pricing for the dataset ${dataset_id}`,
-              },
-            ],
-          };
-        }
-      }
+      })
     );
 
     this.server.tool(
@@ -305,10 +369,7 @@ export class MyMCP extends McpAgent<Bindings, State> {
           ),
       },
 
-      async ({ accessToken, dataset_id, payToken }) => {
-        let isSessionValid = await checkSession(accessToken);
-
-        if (accessToken.length !== 0 && isSessionValid) {
+      this.withAuth(async ({ accessToken, dataset_id, payToken }) => {
           const currentDataset = this.dataset.data.filter((data) => {
             return data.dataId === dataset_id;
           });
@@ -354,17 +415,7 @@ export class MyMCP extends McpAgent<Bindings, State> {
               },
             ],
           };
-        } else {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Signed up already? Sign in now to download the dataset ${dataset_id}`,
-              },
-            ],
-          };
-        }
-      }
+      })
     );
   }
 }

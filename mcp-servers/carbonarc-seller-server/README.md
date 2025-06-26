@@ -22,7 +22,6 @@ Steps to be followed for setting up Ory:
 
 1.  Install dependencies:
     ```bash
-    cd carbonarc-seller-mcp-server
     npm install
     ```
 2. Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create seller account and seller services.
