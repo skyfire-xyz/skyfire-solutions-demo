@@ -5,7 +5,7 @@ This MCP Server has two tools -
 2. upload-csv: Imports csv dataset and summary for the retrieved dataset to google sheet in form of a presentation 
 
 ## Note:
-The Reporting MCP server is a placeholder demo used solely to illustrate the end-to-end agent flow. It is not within the scope of Skyfire’s core competencies. Any reporting or visualisation service / MCP server can be integrated in its place.
+The Reporting MCP server is a demo to illustrate this end-to-end agent flow. Any other reporting or visualization service could be integrated in its place. It is outside of the core Skyfire flow.
 
 ## Getting Started (optional)
 
