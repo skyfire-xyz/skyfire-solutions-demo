@@ -26,7 +26,8 @@ Steps to be followed for setting up Ory:
     npm install
     ```
 2. Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create seller account and seller services.
-3.  Set up environment variables:
+3. Git clone Ory MCP Access Control repo from here and use npm link to tie it with this server. This will be a npm package in a few days.
+4. Set up environment variables:
     Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```
