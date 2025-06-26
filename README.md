@@ -38,7 +38,8 @@ To run this demo,
 - Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create Skyfire API key, complete Buyer and Seller Onboarding.
 
 - Set up an Ory account: 
-Ory is the default IAM being used in this demo. [Blog](https://www.ory.sh/blog/agentic-ai-security-mcp-oauth) to refer for more details on Ory + MCP integration.
+Ory is the default CIAM being used in this demo. Take a look at our [partnership with Ory](https://www.ory.sh/blog/enabling-the-agentic-economy-with-ory-and-skyfire) integrating KYAPay with CIAMs to secure the CarbonArc MCP server (the seller of the data).
+[Blog](https://www.ory.sh/blog/agentic-ai-security-mcp-oauth) to refer for more details on Ory + MCP integration.
 
 Steps to be followed for setting up Ory:
 1. Visit the [Ory Console](https://console.ory.sh)
@@ -63,3 +64,6 @@ The following MCP servers are based on the SSE transport protocol.
     git clone https://github.com/skyfire-xyz/skyfire-solutions-demo.git
     ```
 2. Follow instructions in each sub-directory.
+
+## Note:
+Take a look at the live demo [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).

@@ -10,7 +10,8 @@ This MCP Server has four tools -
 ## Getting Started
 
 - Set up an Ory account: 
-Ory is the default IAM being used in this demo. [Blog](https://www.ory.sh/blog/agentic-ai-security-mcp-oauth) to refer for more details on Ory + MCP integration.
+Ory is the default CIAM being used in this demo. Take a look at our [partnership with Ory](https://www.ory.sh/blog/enabling-the-agentic-economy-with-ory-and-skyfire) integrating KYAPay with CIAMs to secure the CarbonArc MCP server (the seller of the data).
+[Blog](https://www.ory.sh/blog/agentic-ai-security-mcp-oauth) to refer for more details on Ory + MCP integration.
 
 Steps to be followed for setting up Ory:
 1. Visit the [Ory Console](https://console.ory.sh)
