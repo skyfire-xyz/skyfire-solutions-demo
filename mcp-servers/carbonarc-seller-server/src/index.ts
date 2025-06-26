@@ -20,7 +20,7 @@ const jwksUrl = env.JWKS_URL;
 
 // Initialize Ory access control
 const accessControl = new McpAccessControl({
-  jwksUrl: env.JWKS_URL,
+  jwksUrl: jwksUrl,
   issuer: "https://app-qa.skyfire.xyz/",
   audience: env.CARBONARC_SELLER_SERVICE_ID,
   claimKey: "bid.skyfireEmail",
