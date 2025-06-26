@@ -33,11 +33,9 @@ Steps to be followed for setting up Ory:
 
     ```
     # .env
-    CARBONARC_SELLER_ID=your_seller_id
     CARBONARC_SELLER_SERVICE_ID=your_seller_service_id
     JWKS_URL=https://api.skyfire.xyz/.well-known/jwks.json
     ORY_API_KEY=your_ory_api_key
-    ORY_PASSWORD=your_ory_password
     ORY_PROJECT_ID=your_ory_project_id
     SKYFIRE_API_KEY=your_carbonarc_seller_api_key
     JWT_ISSUER=https://app.skyfire.xyz/

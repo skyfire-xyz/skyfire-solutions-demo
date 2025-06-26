@@ -279,7 +279,7 @@ export class MyMCP extends McpAgent<Bindings, State> {
               content: [
                 {
                   type: "text",
-                  text: `Purchased dataset ${dataset_id}. Download from ${this.dataset.data[dataset_id - 1].dataUrl}`,
+                  text: `Purchased dataset ${dataset_id}. Download from ${currentDataset[0].dataUrl}`,
                 },
               ],
             };

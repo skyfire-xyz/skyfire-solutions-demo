@@ -3,20 +3,14 @@
 declare namespace Cloudflare {
 	interface Env {
 		MCP_OBJECT: DurableObjectNamespace<import("./src/index").MyMCP>;
-        ACCOUNT_ID: string;
-        ACCESS_KEY_ID: string;
-        SECRET_ACCESS_KEY: string;
         SKYFIRE_API_KEY: string;
-        BUCKET_NAME: string;
 		ASSETS: Fetcher;
         ORY_API_KEY: string;
         ORY_PROJECT_ID: string;
         JWKS_URL: string;
-        CARBONARC_SELLER_ID: string;
         CARBONARC_SELLER_SERVICE_ID: string;
         JWT_ISSUER: string;
         SKYFIRE_API_BASE_URL: string;
-        R2_BASE_URL: string;
 	}
 }
 interface Env extends Cloudflare.Env {}
