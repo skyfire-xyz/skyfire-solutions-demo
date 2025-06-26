@@ -1,13 +1,12 @@
 "use client";
 
 import { toast } from "sonner";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 import {
   ActionButtons,
   InputPanel,
 } from "@/components/agent/agent-input-panel";
-// import { SecretDialog } from "@/components/secret-dialog";
 import { AgentHeader } from "@/components/agent/agent-header";
 import { OutputPanel } from "@/components/agent/agent-output-panel";
 import { MobileOutputPanel } from "@/components/agent/agent-mobile-output-panel";
