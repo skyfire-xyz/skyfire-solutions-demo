@@ -2,10 +2,7 @@ import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { Hono } from "hono";
-// import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { env } from "cloudflare:workers";
-// import { Configuration, FrontendApi, IdentityApi } from "@ory/client-fetch";
-// import { jwtVerify, createRemoteJWKSet } from "jose";
 import { McpAccessControl } from "@ory/mcp-access-control";
 
 type Bindings = Env;
@@ -31,121 +28,7 @@ const accessControl = new McpAccessControl({
   oryApiKey: oryApiKey,
 });
 
-console.log("accessControl", accessControl);
-
 const oryAccessControlTool = accessControl.getToolDefinition();
-console.log("oryAccessControlTool", JSON.stringify(oryAccessControlTool));
-
-
-// // Initialize Ory clients
-// const oryConfig = new Configuration({
-//   basePath: `https://${oryProjectId}.projects.oryapis.com`,
-//   accessToken: oryApiKey,
-//   headers: {
-//     Authorization: `Bearer ${oryApiKey}`,
-//   },
-// });
-
-// const frontendApi = new FrontendApi(oryConfig);
-// const identityApi = new IdentityApi(oryConfig);
-// let oryResponse: string;
-
-// async function checkSession(sessionToken: string): Promise<boolean> {
-//   try {
-//     const response = await frontendApi.toSession({
-//       xSessionToken: sessionToken,
-//     });
-//     return response.active === true;
-//   } catch (error) {
-//     console.error("Error checking session:", error);
-//     return false;
-//   }
-// }
-
-// const createAccountAndLoginWithOry = async (
-//   kyaToken: string,
-//   password: string
-// ) => {
-//   try {
-//     // Initialize JWKS client for token verification
-//     const JWKS = createRemoteJWKSet(new URL(jwksUrl));
-//     // Verify the KYA token
-//     const { payload } = await jwtVerify(kyaToken, JWKS, {
-//       issuer: env.JWT_ISSUER,
-//       audience: env.CARBONARC_SELLER_SERVICE_ID,
-//     });
-//     // Only for demo: randomised the email to create a new account in every run
-//     const skyfireEmail: string =
-//       Math.floor(Math.random() * 100000) + payload.bid.skyfireEmail;
-
-//     // Check if identity exists in Ory
-//     const identities = await identityApi.listIdentities({
-//       credentialsIdentifier: skyfireEmail,
-//     });
-
-//     let identityId: string;
-
-//     if (identities.length === 0) {
-//       // Create new identity if it doesn't exist
-//       const createResponse = await identityApi.createIdentity({
-//         createIdentityBody: {
-//           schema_id: "preset://email",
-//           traits: {
-//             email: skyfireEmail,
-//           },
-//           credentials: {
-//             password: {
-//               config: {
-//                 password: password,
-//               },
-//             },
-//           },
-//         },
-//       });
-
-//       identityId = createResponse.id;
-//       oryResponse = "Account created successfully. ";
-//     } else {
-//       identityId = identities[0].id;
-//       oryResponse = "Account already exists. ";
-//     }
-
-//     // Create login flow
-//     const loginFlow = await frontendApi.createNativeLoginFlow();
-
-//     // Complete login flow
-//     const loginResponse = await frontendApi.updateLoginFlow({
-//       flow: loginFlow.id,
-//       updateLoginFlowBody: {
-//         identifier: skyfireEmail,
-//         password: password,
-//         method: "password",
-//       },
-//     });
-
-//     // Get session token
-//     const sessionToken = loginResponse.session_token;
-
-//     return {
-//       content: [
-//         {
-//           type: "text",
-//           text: oryResponse + `Access token is: ${sessionToken}`,
-//         },
-//       ],
-//     };
-//   } catch (error: any) {
-//     console.log("Error in create-account:", JSON.stringify(error));
-//     return {
-//       content: [
-//         {
-//           type: "text",
-//           text: `Error in account creation: ${error.message}`,
-//         },
-//       ],
-//     };
-//   }
-// };
 
 const createAccountAndLoginWithOry = async (
   kyaToken: string,
@@ -157,7 +40,6 @@ const createAccountAndLoginWithOry = async (
       password: "123456S$d#d",
     });
     if (result.success) {
-      console.log("result success", result);
       return {
         content: [
           {
@@ -167,7 +49,6 @@ const createAccountAndLoginWithOry = async (
         ],
       };
     } else {
-      console.log("result failed", result);
       return {
         content: [
           {
@@ -178,7 +59,6 @@ const createAccountAndLoginWithOry = async (
       };
     }
   } catch (error) {
-    console.log("result catch", error);
     return {
       content: [
         {
@@ -208,8 +88,6 @@ export class MyMCP extends McpAgent<Bindings, State> {
           { "x-session-token": params.accessToken },
           { headerName: "x-session-token" }
         );
-
-        console.log("validationResult", validationResult);
 
         // Token validation Failure: return error to client 
         if (!validationResult.isValid) {

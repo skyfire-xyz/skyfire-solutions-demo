@@ -27,7 +27,7 @@
   },
   "kv_namespaces": [
     {
-      "binding": "OAUTH_KV",
+      "binding": "SKYFIRE_SOLUTIONS_DEMO_REPOORTING_MCP_SERVER_KV",
       "id": "6a0ef31935a544d688ef18fe15c35cdd"
     }
   ],
