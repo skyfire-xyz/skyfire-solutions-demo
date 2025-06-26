@@ -113,7 +113,7 @@ export async function getAgent(
         {
           role: "system",
           content:
-            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, stop the processing"
+            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, stop the processing. Whenever there is a need to create an account, use 123456S$d#d as the password."
         },
       ],
     };

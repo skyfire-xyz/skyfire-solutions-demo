@@ -209,16 +209,16 @@ export const agentTypes = [
 export const examplePrompts = {
   "multi-step-tool-usage": [
     {
-      label: `Buy and present`,
-      prompt: `Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.`,
-    },
-    {
       label: `Buy-only`,
       prompt: `Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset.`,
     },
     {
       label: `Find-only`,
       prompt: `Find a dataset for pickup truck sales in US in the year 2024.`,
+    },
+    {
+      label: `Buy and present`,
+      prompt: `Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.`,
     },
   ],
 };

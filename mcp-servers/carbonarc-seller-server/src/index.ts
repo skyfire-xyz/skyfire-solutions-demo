@@ -37,7 +37,7 @@ const createAccountAndLoginWithOry = async (
   try {
     const result = await oryAccessControlTool.handler({
       token: kyaToken,
-      password: "123456S$d#d",
+      password: password,
     });
     if (result.success) {
       return {
