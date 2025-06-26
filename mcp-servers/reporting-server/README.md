@@ -4,9 +4,6 @@ This MCP Server has two tools -
 1. retrieve-file-content: Retrieve the file contents from URL
 2. upload-csv: Imports csv dataset and summary for the retrieved dataset to google sheet in form of a presentation 
 
-## Live Reporting MCP Server
-The Reporting MCP Server is hosted on [CloudFlare](skyfire-solutions-demo-reporting-mcp-server.skyfire.dev).
-
 ## Getting Started (optional)
 
 - Set up a Google Apps Script:

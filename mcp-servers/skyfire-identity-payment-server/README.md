@@ -8,9 +8,6 @@ This MCP Server also has three tools -
 2. create-kya-token: This tool generates and returns the KYA token (JWT). KYA stands for Know Your Agent. KYA token is in JWT format which has user details in the JWT payload. This token could be used to share agent information for creating new account or login to existing account or for any other usecase which needs agent information.
 3. create-payment-token: This tool takes amount and sellerServiceId to create a PAY token (JWT) for a transaction. It returns generated PAY token (JWT). PAY token stands for payment token. Whenever PAY token is generated it actually deducts money from the linked wallet. So, essentially PAY token should only be generated if intention is to execute a payment transaction.
 
-## Live Skyfire Identiy & Payment MCP Server
-The Skyfire Identiy & Payment MCP Server is hosted on [CloudFlare](skyfire-solutions-demo-identity-payment-mcp-server.skyfire.dev).
-
 ## Getting Started
 
 - Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create a seller account and seller service.
