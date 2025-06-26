@@ -21,7 +21,7 @@ export function AgentSandbox() {
   const [inputs, setInputs] = useState<Record<string, string>>({"prompt": `Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset`});
   const [selectedExampleIndex, setSelectedExampleIndex] = useState<
     number | null
-  >(null);
+  >(0);
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [parsedOutput, setParsedOutput] = useState<unknown>(null);

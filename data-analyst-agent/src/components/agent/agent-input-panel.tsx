@@ -125,6 +125,7 @@ export function InputPanel({
                   <Textarea
                     value={inputs[field.name] || ""}
                     onChange={(e) => onInputChange(field.name, e.target.value)}
+                    readOnly
                     placeholder={field.placeholder}
                     className={cn(
                       " rounded-[5px] resize-none text-[16px] leading-snug md:leading-relaxed md:text-[14px] caret-blue-400  border-none ring-1 ring-[#F6F6F6] ring-offset-neutral-50 ring-offset-1 transition-all duration-200 shadow-[0px_1px_0px_0px_hsla(0,_0%,_0%,_0.02)_inset,_0px_0px_0px_1px_hsla(0,_0%,_0%,_0.02)_inset,_0px_0px_0px_1px_rgba(255,_255,_255,_0.25)] focus-visible:ring-[#2B7BE5] focus-visible:ring-[1px] focus-visible:ring-offset-blue-100 focus-visible:ring-offset-2 ease-out",

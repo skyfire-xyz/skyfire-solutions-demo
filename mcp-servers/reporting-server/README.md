@@ -4,6 +4,9 @@ This MCP Server has two tools -
 1. retrieve-file-content: Retrieve the file contents from URL
 2. upload-csv: Imports csv dataset and summary for the retrieved dataset to google sheet in form of a presentation 
 
+## Note:
+The Reporting MCP server is a placeholder demo used solely to illustrate the end-to-end agent flow. It is not within the scope of Skyfire’s core competencies. Any reporting or visualisation service / MCP server can be integrated in its place.
+
 ## Getting Started (optional)
 
 - Set up a Google Apps Script:
