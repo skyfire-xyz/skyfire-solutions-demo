@@ -12,6 +12,9 @@ Purchase a dataset for pickup truck sales
 - Budget: $0.005
 ``` 
 
+## Live Demo Link
+This demo agent is available [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
+
 ## Installation
 
 1.  Install dependencies:
@@ -23,7 +26,7 @@ Purchase a dataset for pickup truck sales
 
     ```
     # .env
-    
+
     OPENAI_API_KEY=your_openai_api_key
     SKYFIRE_MCP_URL=your_skyfire_mcp_server_url
     ```

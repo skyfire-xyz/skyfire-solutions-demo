@@ -12,6 +12,9 @@ A dataset for pickup truck sales
 - Budget: $0.005
 ```
 
+## Live Demo Link
+You can play with the live demo [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
+
 ## Flow
 
 - The buyer agent already has an account with Skyfire and Skyfire's Identity and Payment MCP server is already setup in the buyer agent
