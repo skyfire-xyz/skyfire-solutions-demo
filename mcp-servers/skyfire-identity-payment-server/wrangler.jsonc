@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "skyfire-identity-payment",
+	"name": "skyfire-solutions-demo-skyfire-identity-payment-mcp-server",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-03-10",
 	"compatibility_flags": ["nodejs_compat"],
@@ -29,7 +29,7 @@
 	},
 	"kv_namespaces": [
 		{
-			"binding": "SKYFIRE_IDENTITY_PAYMENT_KV",
+			"binding": "SKYFIRE_SOLUTIONS_DEMO_SKYFIRE_IDENTITY_PAYMENT_MCP_SERVER_KV",
 		    "id": "75ad83f2ee6f418a862d332dfd337177"
 		}
 	],
