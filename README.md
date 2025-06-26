@@ -65,5 +65,10 @@ The following MCP servers are based on the SSE transport protocol.
     ```
 2. Follow instructions in each sub-directory.
 
+## Reference videos
+1. ![Skyfire setup](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/videos/skyfire_setup.mov)
+2. ![Ory setup](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/videos/ory_setup.mov)
+
+
 ## Note:
 Take a look at the live demo [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
