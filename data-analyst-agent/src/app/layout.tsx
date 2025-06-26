@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Skyfire E2E Demo",
-  description: "Skyfire E2E Demo",
+  title: "Data Analyst Agent Demo",
+  description: "Data Analyst Agent Demo",
 };
 
 export default function RootLayout({
