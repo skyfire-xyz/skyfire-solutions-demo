@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "carbonarc-seller",
+  "name": "skyfire-solutions-demo-carbonarc-seller-mcp-server",
   "main": "src/index.ts",
   "compatibility_date": "2025-03-10",
   "compatibility_flags": ["nodejs_compat"],
@@ -27,7 +27,7 @@
   },
   "kv_namespaces": [
     {
-      "binding": "CARBONARC_SELLER_KV",
+      "binding": "SKYFIRE_SOLUTIONS_DEMO_CARBONARC_SELLER_MCP_SERVER_KV",
       "id": "d693f7cdb5e04f70a7243cdd3f897126",
     },
   ],
