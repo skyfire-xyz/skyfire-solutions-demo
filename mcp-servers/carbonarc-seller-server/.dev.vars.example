@@ -1,4 +1,3 @@
-CARBONARC_SELLER_SERVICE_ID=your_seller_service_id
 CARBONARC_SELLER_ID=your_seller_id
 JWKS_URL=https://api.skyfire.xyz/.well-known/jwks.json
 ORY_API_KEY=your_ory_api_key
