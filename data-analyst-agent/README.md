@@ -21,7 +21,8 @@ This demo agent is available [here](https://data-analyst-agent-demo-74464367970.
     ```bash
     npm install
     ```
-2.  Set up environment variables:
+2. Setup OpenAI account and get API key for LLM
+3. Set up environment variables:
     Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```

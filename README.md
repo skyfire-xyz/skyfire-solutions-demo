@@ -66,11 +66,15 @@ The following MCP servers are based on the SSE transport protocol.
     git clone https://github.com/skyfire-xyz/skyfire-solutions-demo.git
     ```
 2. Follow instructions in each sub-directory.
+3. Setup OpenAI account and get API key for LLM.
 
 ## Reference videos
 1. ![Skyfire setup](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/videos/skyfire_setup.mov)
+  - Get the Buyer API key, Seller API key, Seller ID and Seller Service ID for env variables
 2. ![Ory setup](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/videos/ory_setup.mov)
-
+  - Get the API key and Project Slug and use those for ORY_API_KEY and ORY_PROJECT_ID env variables
+3. ![Demo setup](https://github.com/skyfire-xyz/skyfire-solutions-demo/blob/main/static/videos/demo_setup.mov)
+  - Use the values saved during Skyfire and Ory setup
 
 ## Note:
 Take a look at the live demo [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
