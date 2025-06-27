@@ -9,6 +9,7 @@ declare namespace Cloudflare {
         ORY_PROJECT_ID: string;
         JWKS_URL: string;
         CARBONARC_SELLER_SERVICE_ID: string;
+        CARBONARC_SELLER_ID: string;
         JWT_ISSUER: string;
         SKYFIRE_API_BASE_URL: string;
 	}

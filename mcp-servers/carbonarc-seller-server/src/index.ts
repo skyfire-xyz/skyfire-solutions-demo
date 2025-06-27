@@ -22,7 +22,7 @@ const jwksUrl = env.JWKS_URL;
 const accessControl = new McpAccessControl({
   jwksUrl: jwksUrl,
   issuer: env.JWT_ISSUER,
-  audience: env.CARBONARC_SELLER_SERVICE_ID,
+  audience: env.CARBONARC_SELLER_ID,
   claimKey: "bid.skyfireEmail",
   oryProjectUrl: `https://${oryProjectId}.projects.oryapis.com`,
   oryApiKey: oryApiKey,
@@ -39,6 +39,7 @@ const createAccountAndLoginWithOry = async (
       token: kyaToken,
       password: password,
     });
+
     if (result.success) {
       return {
         content: [
