@@ -21,7 +21,7 @@ const jwksUrl = env.JWKS_URL;
 // Initialize Ory access control
 const accessControl = new McpAccessControl({
   jwksUrl: jwksUrl,
-  issuer: "https://app-qa.skyfire.xyz/",
+  issuer: env.JWT_ISSUER,
   audience: env.CARBONARC_SELLER_SERVICE_ID,
   claimKey: "bid.skyfireEmail",
   oryProjectUrl: `https://${oryProjectId}.projects.oryapis.com`,
