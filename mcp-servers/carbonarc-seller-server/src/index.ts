@@ -26,6 +26,7 @@ const accessControl = new McpAccessControl({
   claimKey: "bid.skyfireEmail",
   oryProjectUrl: `https://${oryProjectId}.projects.oryapis.com`,
   oryApiKey: oryApiKey,
+  schemaId: "preset://email",
 });
 
 const oryAccessControlTool = accessControl.getToolDefinition();
