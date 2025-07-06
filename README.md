@@ -47,7 +47,7 @@ Steps to be followed for setting up Ory:
 3. Create a project in the new workspace
 4. Use the Project ID, Project Slug, API endpoints etc details from Project Settings tab in env variables in [CarbonArc MCP Server](https://github.com/skyfire-xyz/skyfire-solutions-demo/tree/main/mcp-servers/carbonarc-seller-server).
 
-- Git clone Ory MCP Access Control repo from [here](https://github.com/jhickmanit/mcp-access-control) and use npm link to tie it into CarbonArc MCP server. This will be a npm package in a few days. 
+- Git clone Ory MCP repo from [here](https://github.com/ory/mcp) and use npm link to tie [mcp-access-control](https://github.com/ory/mcp/tree/main/packages/mcp-access-control) package into CarbonArc MCP server. This will be a npm package in a few days.
 
 ## Contents: 
 

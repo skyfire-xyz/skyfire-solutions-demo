@@ -23,7 +23,7 @@ For this demo, Skyfire works a directory of services from which the CarbonArc MC
     npm install
     ```
 2.  Set up environment variables:
-    Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
+    Create a `.dev.vars` file in the root directory. You can copy `.dev.vars.example` if one exists, or add the necessary variables manually.
 
     ```
     # .env

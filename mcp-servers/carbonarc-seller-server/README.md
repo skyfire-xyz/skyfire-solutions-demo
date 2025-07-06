@@ -26,18 +26,18 @@ Steps to be followed for setting up Ory:
     npm install
     ```
 2. Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create seller account and seller services.
-3. Git clone Ory MCP Access Control repo from here and use npm link to tie it with this server. This will be a npm package in a few days.
+3. Git clone Ory MCP repo from [here](https://github.com/ory/mcp) and use npm link to tie [mcp-access-control](https://github.com/ory/mcp/tree/main/packages/mcp-access-control) package with this server. This will be a npm package in a few days.
 4. Set up environment variables:
-    Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
+    Create a `.dev.vars` file in the root directory. You can copy `.dev.vars.example` if one exists, or add the necessary variables manually.
 
     ```
-    # .env
+    # .dev.vars
     CARBONARC_SELLER_SERVICE_ID=your_seller_service_id
     JWKS_URL=https://api.skyfire.xyz/.well-known/jwks.json
     ORY_API_KEY=your_ory_api_key
     ORY_PROJECT_ID=your_ory_project_slug
     SKYFIRE_API_KEY=your_carbonarc_seller_api_key
-    JWT_ISSUER=https://app.skyfire.xyz/
+    JWT_ISSUER=https://app.skyfire.xyz
     SKYFIRE_API_BASE_URL=https://api.skyfire.xyz
     ```
 
