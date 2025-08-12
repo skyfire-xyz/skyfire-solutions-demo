@@ -84,13 +84,12 @@ export class MyMCP extends McpAgent<Bindings, State> {
 
     withAuth = (handler: Function) => {
       return async function checkSession(params, context) {
-      
         // call ORY to validate session 
         const validationResult = await accessControl.validateSession(
-          { "x-session-token": params.accessToken },
+          { "x-session-token": params.access_token },
           { headerName: "x-session-token" }
         );
-
+        
         // Token validation Failure: return error to client 
         if (!validationResult.isValid) {
           return {
