@@ -2,41 +2,18 @@
 
 This application is designed to demonstrate end-to-end commerce flows using Skyfire technologies. It features a prompt-based AI agent interface that interacts with services via the Model Context Protocol (MCP) to simulate tool discovery, tool installation, and using the tools leveraging Autogen.
 
-The agent is tasked with -
+The agent is tasked with:
 ```
 Find a dataset for pickup truck sales in US in the year 2024. Proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.
-``` 
-
-## Contents: 
-
-- MCP Servers:
-The following MCP servers are based on the SSE transport protocol.
-1. Skyfire Identity & Payment MCP Server
-2. CarbonArc MCP Server
-3. Reporting MCP Server
-
-- Data Analyst Strands Agent
-
-## Installation
-
-### Prerequisites
-- Python 3.8+
-- AWS credentials configured for Bedrock access
-- Network access to MCP servers
-
-### Setup
-
-1. **Install Dependencies**:
-```bash
-pip install -r requirements.txt
 ```
 
-2. **Configure AWS Credentials**:
+## Contents
 
-Go to configure credential in this Strands documentation
-https://strandsagents.com/latest/documentation/docs/user-guide/quickstart/
-
-Get access to bedrock in AWS
+- **MCP Servers** (based on SSE transport protocol):
+  - Skyfire Identity & Payment MCP Server
+  - CarbonArc MCP Server
+  - Reporting MCP Server
+- **Data Analyst Strands Agent**
 
 ## Installation
 
@@ -54,32 +31,33 @@ pip install strands-agents strands-tools PyJWT requests
 
 2. **Configure AWS Credentials**:
 
-Go to configure credential in this doc
-https://strandsagents.com/latest/documentation/docs/user-guide/quickstart/
+   Go to configure credential in this Strands documentation:
+   https://strandsagents.com/latest/documentation/docs/user-guide/quickstart/
 
-Get access to bedrock in AWS
+   Get access to Bedrock in AWS
 
-Get the following env variable and set them up 
+3. **Set Environment Variables**:
 
-Configure your AWS secrets and keys
-```bash
-# Option 1: AWS CLI
-aws configure
+   Configure your AWS secrets and keys:
+   ```bash
+   # Option 1: AWS CLI
+   aws configure
 
-# Option 2: Environment variables in terminal where running agent
-export AWS_ACCESS_KEY_ID="your_access_key"
-export AWS_SECRET_ACCESS_KEY="your_secret_key"
-export AWS_REGION="region
-```
+   # Option 2: Environment variables in terminal where running agent
+   export AWS_ACCESS_KEY_ID="your_access_key"
+   export AWS_SECRET_ACCESS_KEY="your_secret_key"
+   export AWS_REGION="your_region"
+   ```
 
-Then **Put in the env variable file**:
-AWS_ACCESS_KEY_ID="your_access_key"
-AWS_SECRET_ACCESS_KEY="your_secret_key"
-AWS_REGION="region
-SKYFIRE_API_KEY=
-SKYFIRE_MCP_SERVER_URL=
-REPORTING_MCP_SERVER_URL=
-
+   Then add to your environment file:
+   ```bash
+   AWS_ACCESS_KEY_ID="your_access_key"
+   AWS_SECRET_ACCESS_KEY="your_secret_key"
+   AWS_REGION="your_region"
+   SKYFIRE_API_KEY="your_skyfire_api_key"
+   SKYFIRE_MCP_SERVER_URL="your_skyfire_mcp_server_url"
+   REPORTING_MCP_SERVER_URL="your_reporting_mcp_server_url"
+   ```
 
 ## Usage
 
