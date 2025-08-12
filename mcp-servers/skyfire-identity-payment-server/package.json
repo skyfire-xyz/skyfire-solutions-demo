@@ -19,7 +19,7 @@
     "wrangler": "^4.11.0"
   },
   "dependencies": {
-    "@cloudflare/workers-oauth-provider": "^0.0.2",
+    "@cloudflare/workers-oauth-provider": "^0.0.5",
     "@modelcontextprotocol/sdk": "^1.7.0",
     "@skyfire-xyz/skyfire-sdk": "^0.10.0",
     "agents": "^0.0.43",
