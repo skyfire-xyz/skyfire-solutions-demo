@@ -77,6 +77,7 @@ async def run_agent() -> None:
         reflect_on_tool_use=True,
         max_tool_iterations=20,
         system_message="You are a helpful e-commerce buyer agent assisting user to make a purchase. Whenever there is a need to create an account, use 123456S$d#d as the password. IMPORTANT: Do not assume dataset URLs and pricing."
+        # For the scope of this demo, the agent is instructed to use a static password for account creation and login. As an improvisation in future, the agent could randomly generate a password and store in agent memory and also share it with human using secure password services like 1Password, Keeper etc.
     )
     result = await agent.run(task="Find a dataset for pickup truck sales in US in the year 2024. Proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.", cancellation_token=CancellationToken())
 
