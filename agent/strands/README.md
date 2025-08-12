@@ -20,15 +20,14 @@ Find a dataset for pickup truck sales in US in the year 2024. Proceed with purch
 
 1. **Install Dependencies**:
 ```bash
-pip install strands-agents strands-tools PyJWT requests
+pip install -r requirements.txt
 ```
 
 2. **Configure AWS Credentials**:
 
-   Go to configure credential in this Strands documentation:
-   https://strandsagents.com/latest/documentation/docs/user-guide/quickstart/
-
-      Get access to Bedrock in AWS
+   - Follow the [Strands documentation Quickstart](https://strandsagents.com/latest/documentation/docs/user-guide/quickstart/) to configure your credentials.
+   - Get [access to Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access-modify.html) in AWS 
+   - Obtain your AWS secrets for step 4
 
 3. **Skyfire Platform Setup**:
    Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create Skyfire API key, complete Buyer and Seller Onboarding.
