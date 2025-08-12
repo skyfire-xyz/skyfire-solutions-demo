@@ -17,12 +17,6 @@ Find a dataset for pickup truck sales in US in the year 2024. Proceed with purch
 
 ## Installation
 
-### Prerequisites
-- Python 3.8+
-- AWS credentials configured for Bedrock access
-- Network access to MCP servers
-
-### Setup
 
 1. **Install Dependencies**:
 ```bash
@@ -34,9 +28,12 @@ pip install strands-agents strands-tools PyJWT requests
    Go to configure credential in this Strands documentation:
    https://strandsagents.com/latest/documentation/docs/user-guide/quickstart/
 
-   Get access to Bedrock in AWS
+      Get access to Bedrock in AWS
 
-3. **Set Environment Variables**:
+3. **Skyfire Platform Setup**:
+   Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create Skyfire API key, complete Buyer and Seller Onboarding.
+
+4. **Set Environment Variables**:
 
    Configure your AWS secrets and keys:
    ```bash
@@ -63,7 +60,7 @@ pip install strands-agents strands-tools PyJWT requests
 
 ### Quick Start
 
-Run the simplified demo:
+Run the agent:
 ```bash
 python agent.py
 ```
