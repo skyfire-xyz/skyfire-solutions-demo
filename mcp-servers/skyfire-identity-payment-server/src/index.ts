@@ -108,13 +108,13 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
       This token could be used to share agent information for creating new account or login to existing account or for any other usecase which needs agent information. 
       `,
       {
-        buyerTag: z
+        buyer_tag: z
           .string()
           .uuid()
           .describe("unique buyer agent identification (uuid)"),
-        sellerServiceId: z.string().describe("ID of connected seller"),
+        seller_service_id: z.string().describe("ID of connected seller"),
       },
-      async ({ buyerTag, sellerServiceId }) => {
+      async ({ buyer_tag, seller_service_id }) => {
         const response = await fetch(
           `${env.SKYFIRE_API_BASE_URL}/api/v1/tokens`,
           {
@@ -125,8 +125,8 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
             },
             body: JSON.stringify({
               type: "kya",
-              buyerTag: buyerTag,
-              sellerServiceId: sellerServiceId,
+              buyerTag: buyer_tag,
+              sellerServiceId: seller_service_id,
               expiresAt: getEpochPlus24Hours(),
             }),
           }
@@ -155,13 +155,13 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
         amount: z
           .string()
           .describe("dollar value of dataset selected for download"),
-        sellerServiceId: z.string().describe("ID of connected seller"),
-        buyerTag: z
+        seller_service_id: z.string().describe("ID of connected seller"),
+        buyer_tag: z
           .string()
           .uuid()
           .describe("unique buyer agent identification (uuid)"),
       },
-      async ({ amount, sellerServiceId, buyerTag }) => {
+      async ({ amount, seller_service_id, buyer_tag }) => {
         const response = await fetch(
           `${env.SKYFIRE_API_BASE_URL}/api/v1/tokens`,
           {
@@ -172,9 +172,9 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
             },
             body: JSON.stringify({
               type: "pay",
-              buyerTag: buyerTag,
+              buyerTag: buyer_tag,
               tokenAmount: amount,
-              sellerServiceId: sellerServiceId,
+              sellerServiceId: seller_service_id,
               expiresAt: getEpochPlus24Hours(),
             }),
           }
@@ -196,7 +196,7 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
           content: [
             {
               type: "text",
-              text: `Transaction of ${amount} is successful to ${sellerServiceId} via token ${res.token}`,
+              text: `Transaction of ${amount} is successful to ${seller_service_id} via token ${res.token}`,
             },
           ],
         };
