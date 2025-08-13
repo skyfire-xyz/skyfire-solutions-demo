@@ -1,22 +1,5 @@
 # Data Analyst Autogen Agent
 
-This application is designed to demonstrate end-to-end commerce flows using Skyfire technologies. It features a prompt-based AI agent interface that interacts with services via the Model Context Protocol (MCP) to simulate tool discovery, tool installation, and using the tools leveraging Autogen.
-
-The agent is tasked with -
-```
-Find a dataset for pickup truck sales in US in the year 2024. Proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.
-``` 
-
-## Contents: 
-
-- MCP Servers:
-The following MCP servers are based on the SSE transport protocol.
-1. Skyfire Identity & Payment MCP Server
-2. CarbonArc MCP Server
-3. Reporting MCP Server
-
-- Data Analyst Autogen Agent
-
 ## Installation
 
 1.  Install dependencies:
