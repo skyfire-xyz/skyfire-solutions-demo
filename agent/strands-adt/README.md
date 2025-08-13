@@ -1,8 +1,7 @@
-# Strands-adt
+# Data Analyst Strands ADT Agent
 
-Built using the Agent Development Toolkit. For more details on AWS ADT look (here)[https://github.com/awslabs/agent-dev-toolkit]
+Built using the Agent Development Toolkit. For more details on AWS ADT look [here](https://github.com/awslabs/agent-dev-toolkit).
 
-# Data Analyst Strands Agent
 
 ## Installation
 
