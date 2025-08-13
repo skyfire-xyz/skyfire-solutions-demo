@@ -5,7 +5,7 @@
 2. [Strands (Python)](https://github.com/skyfire-xyz/skyfire-solutions-demo/tree/main/agent/strands)
 
 
-### Data Analyst Agent Background
+## Data Analyst Agent Background
 
 This application is designed to demonstrate end-to-end commerce flows using Skyfire technologies. It features a prompt-based AI agent interface that interacts with services via the Model Context Protocol (MCP) to simulate tool discovery, tool installation, and tool usage leveraging different agentic frameworks.
 
