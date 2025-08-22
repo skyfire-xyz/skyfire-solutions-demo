@@ -15,8 +15,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return process.env.SKYFIRE_API_KEY || "";
   });
 
-  console.log("apiKey in app-provider", apiKey);
-
   const [agentContext, setAgentContext] = useState<AgentContext>(()  => {
     if (typeof window !== "undefined") {
       return (
@@ -26,12 +24,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     return {};
   });
-
-  // useEffect(() => {
-  //   if (typeof window !== "undefined" && apiKey) {
-  //     sessionStorage.setItem("skyfire_api_key", apiKey);
-  //   }
-  // }, [apiKey]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && agentContext) {
