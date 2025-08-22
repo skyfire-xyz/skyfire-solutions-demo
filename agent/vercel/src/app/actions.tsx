@@ -139,7 +139,7 @@ async function runAgent(
   // Prepare tools from all the connected MCP servers
   // eslint-disable-next-line prefer-const
   console.log("run started");
-  let allTools = await prepareAllTools(agentContext);
+  const allTools = await prepareAllTools(agentContext);
   console.log("prepareAllTools done");
 
   // add user prompt to agentContext
