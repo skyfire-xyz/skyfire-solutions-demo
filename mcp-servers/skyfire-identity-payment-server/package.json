@@ -23,7 +23,7 @@
     "@modelcontextprotocol/sdk": "^1.7.0",
     "@skyfire-xyz/skyfire-sdk": "^0.10.0",
     "agents": "^0.0.43",
-    "hono": "^4.7.4",
+    "hono": "^4.9.7",
     "zod": "^3.24.2"
   },
   "nx": {}
