@@ -70,8 +70,6 @@ dmypy.json
 # pyre type checker
 .pyre/
 
-# Local logs
-*.log
 
 # Ignore packages
 **/site-packages/
