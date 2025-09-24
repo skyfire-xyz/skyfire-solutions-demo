@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Any
 from strands import Agent, tool
 from mcp.client.streamable_http import streamablehttp_client
 from mcp.client.sse import sse_client
-from strands_tools import stop, mcp_client
+from strands_tools import mcp_client
 from strands.tools.mcp.mcp_client import MCPClient, MCPCallToolResult
 from strands.experimental.hooks import BeforeToolInvocationEvent, AfterToolInvocationEvent
 from strands.hooks import HookProvider, HookRegistry, MessageAddedEvent
@@ -231,7 +231,6 @@ class CarbonArcStrandsAgent:
         # Add static tools
         all_tools.extend([
             decode_jwt_token,
-            stop,
             mcp_client
         ])
         # Get server configurations
