@@ -7,7 +7,7 @@ import traceback
 from typing import Dict, List, Optional, Any, Union, cast, AsyncIterator
 from contextlib import ExitStack
 from dotenv import load_dotenv
-from strands_tools import stop, mcp_client
+from strands_tools import mcp_client
 from strands import Agent, tool
 from strands.experimental.hooks import BeforeToolInvocationEvent, AfterToolInvocationEvent
 from strands.hooks import HookProvider, HookRegistry, MessageAddedEvent
@@ -257,7 +257,6 @@ class CarbonArcStrandsAgent(Agent):
         all_tools = []
         # Add static tools
         all_tools.extend([
-            stop,
             mcp_client
         ])
 
