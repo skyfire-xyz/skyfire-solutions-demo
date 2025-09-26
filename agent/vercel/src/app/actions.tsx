@@ -38,6 +38,50 @@ interface ToolResult {
 // Use the SDK's types directly
 type AIStep = StepResult<typeof connectMcpServerTool>;
 
+// Helper function to log step details
+const logStepDetails = (step: StepResult<any>, stepIndex: number) => {
+  console.log(`\n=== Step ${stepIndex + 1} Completed ===`);
+  console.log(`Text: ${step.text || 'No text generated'}`);
+  console.log(`Finish Reason: ${step.finishReason}`);
+  
+  if (step.toolCalls && step.toolCalls.length > 0) {
+    console.log(`Tool Calls (${step.toolCalls.length}):`);
+    step.toolCalls.forEach((toolCall, index) => {
+      console.log(`  ${index + 1}. ${toolCall.toolName}:`, toolCall.args);
+    });
+  }
+  
+  if (step.toolResults && step.toolResults.length > 0) {
+    console.log(`Tool Results (${step.toolResults.length}):`);
+    step.toolResults.forEach((toolResult, index) => {
+      console.log(`  ${index + 1}. ${toolResult.toolName}:`, toolResult.result);
+    });
+  }
+  
+  if (step.usage) {
+    console.log(`Token Usage:`, {
+      inputTokens: step.usage.inputTokens,
+      outputTokens: step.usage.outputTokens,
+      totalTokens: step.usage.totalTokens,
+      reasoningTokens: step.usage.reasoningTokens,
+    });
+  }
+  
+  if (step.reasoning && step.reasoning.length > 0) {
+    console.log(`Reasoning:`, step.reasoning.map(r => r.text).join('\n'));
+  }
+  
+  if (step.files && step.files.length > 0) {
+    console.log(`Files Generated:`, step.files.length);
+  }
+  
+  if (step.sources && step.sources.length > 0) {
+    console.log(`Sources Used:`, step.sources.map(s => s.url || s.id));
+  }
+  
+  console.log(`=== End Step ${stepIndex + 1} ===\n`);
+};
+
 const textConfig: {[key:string]: string} = {
   "find-seller":
     "I will use Skyfire's find-seller tool to find a seller for the requested data & retrieve the MCP server URL of the seller",
@@ -148,6 +192,9 @@ async function runAgent(
     content: input,
   });
 
+  // Step counter for logging
+  let stepCounter = 0;
+
   console.log("agent triggered")
   // Run agent by passing all the prepared tools and agentContext
   const {
@@ -161,6 +208,10 @@ async function runAgent(
     tools: allTools,
     maxSteps: 20,
     messages: agentContext.conversation_history,
+    onStepFinish: (step: StepResult<typeof allTools>) => {
+      logStepDetails(step, stepCounter);
+      stepCounter++;
+    },
   });
   console.log("agent trigger complete")
   // Update agentContext to include all the executed steps
