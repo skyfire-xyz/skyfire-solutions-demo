@@ -39,6 +39,7 @@ interface ToolResult {
 type AIStep = StepResult<typeof connectMcpServerTool>;
 
 // Helper function to log step details
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const logStepDetails = (step: StepResult<any>, stepIndex: number) => {
   console.log(`\n=== Step ${stepIndex + 1} Completed ===`);
   console.log(`Text: ${step.text || 'No text generated'}`);
@@ -60,15 +61,12 @@ const logStepDetails = (step: StepResult<any>, stepIndex: number) => {
   
   if (step.usage) {
     console.log(`Token Usage:`, {
-      inputTokens: step.usage.inputTokens,
-      outputTokens: step.usage.outputTokens,
       totalTokens: step.usage.totalTokens,
-      reasoningTokens: step.usage.reasoningTokens,
     });
   }
   
-  if (step.reasoning && step.reasoning.length > 0) {
-    console.log(`Reasoning:`, step.reasoning.map(r => r.text).join('\n'));
+  if (step.reasoning) {
+    console.log(`Reasoning:`, step.reasoning);
   }
   
   if (step.files && step.files.length > 0) {
@@ -181,7 +179,7 @@ async function runAgent(
   initialFormattedSteps: FormattedStep[] = []
 ) {
   // Prepare tools from all the connected MCP servers
-  // eslint-disable-next-line prefer-const
+  // // eslint-disable-next-line prefer-const
   console.log("run started");
   const allTools = await prepareAllTools(agentContext);
   console.log("prepareAllTools done");
