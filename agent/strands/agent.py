@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Any
 from strands import Agent, tool
 from mcp.client.streamable_http import streamablehttp_client
 from mcp.client.sse import sse_client
-from strands_tools import stop, mcp_client
+from strands_tools import mcp_client
 from strands.tools.mcp.mcp_client import MCPClient, MCPCallToolResult
 from strands.experimental.hooks import BeforeToolInvocationEvent, AfterToolInvocationEvent
 from strands.hooks import HookProvider, HookRegistry, MessageAddedEvent
@@ -31,7 +31,7 @@ system_prompt = """You are a e-commerce buyer agent assisting user to make a pur
 Generate a random UUIDv4 buyer tag for skyfire token calls.
 After you dynamically connect to a new MCP server, call mcp_client: 'action': 'list_tools', 'connection_id': 'carbonarc_seller' to see the arguments you need to use the tools from the MCP server
 {additional_context}
-Remember to call the decode_jwt_token tool immediately after you recieve jwts
+Remember to call the decode_jwt_token tool immediately after you receive jwts. Do no truncate or mutate tokens.
 Whenever there is a need to create an account, use 123456S$d#d as the password
 """
 
@@ -231,7 +231,6 @@ class CarbonArcStrandsAgent:
         # Add static tools
         all_tools.extend([
             decode_jwt_token,
-            stop,
             mcp_client
         ])
         # Get server configurations
