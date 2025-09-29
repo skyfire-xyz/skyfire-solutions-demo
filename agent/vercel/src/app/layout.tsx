@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Data Analyst Agent Demo",
-  description: "Data Analyst Agent Demo",
+  title: "Data Commerce Transaction - Agent built on Vercel",
+  description: "Data Commerce Transaction - Agent built on Vercel",
 };
 
 export default function RootLayout({
