@@ -146,7 +146,7 @@ export const agentResultSchema = z.object({
 
 export const agentTypes = [
   {
-    name: "Skyfire Commerce Agent",
+    name: "Data Commerce Transaction - Agent built on Vercel",
     id: "multi-step-tool-usage",
     description:
       "An autonomous agent designed for secure B2B data commerce. It discovers data sellers, verifies offerings, handles authentication (including Skyfire KYA tokens), executes payments via Skyfire, retrieves data, and can integrate it into analyses or reports. Leverages MCP for communication.",

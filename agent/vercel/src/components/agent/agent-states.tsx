@@ -66,7 +66,7 @@ function LoadingState({
               variants={fadeIn}
               className="bg-blue-600 mb-1 mx-auto w-fit text-white text-[10px] font-medium px-1.5 tracking-wide rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.15),_inset_0_1px_0.5px_rgba(255,255,255,0.2),_0_-0.5px_1px_rgba(0,0,0,0.08)_inset,_0_0_0_1px_rgba(0,0,0,0.08)_inset] relative"
             />
-            <TextRoll className="text-lg lg:text-3xl font-bold">{`${agent.name}`}</TextRoll>
+            <TextRoll className="text-lg lg:text-2xl font-bold">{`${agent.name}`}</TextRoll>
           </div>
           {/* Tools & Time */}
           <motion.div
