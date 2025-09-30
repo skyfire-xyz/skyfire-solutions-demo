@@ -3,8 +3,8 @@
 // Runtime types generated with workerd@1.20250604.0 2025-03-10 nodejs_compat
 declare namespace Cloudflare {
 	interface Env {
-        CARBONARC_SELLER_SERVICE_ID: string;
-        CARBONARC_MCP_SERVER_URL: string;
+        DAPPIER_SELLER_SERVICE_ID: string;
+        DAPPIER_MCP_SERVER_URL: string;
         MCP_OBJECT: DurableObjectNamespace<import("./src/index").MyMCP>;
 		ASSETS: Fetcher;
         SELLER_SERVICES_RESOURCE_URL: string;

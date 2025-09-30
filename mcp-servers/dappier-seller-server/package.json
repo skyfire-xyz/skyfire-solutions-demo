@@ -1,5 +1,5 @@
 {
-  "name": "skyfire-solutions-demo-carbonarc-seller-mcp-server-v2",
+  "name": "skyfire-solutions-demo-dappier-seller-mcp-server-v2",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -24,7 +24,6 @@
     "@cloudflare/workers-oauth-provider": "^0.0.2",
     "@modelcontextprotocol/sdk": "^1.7.0",
     "@ory/client-fetch": "^1.20.11",
-    "@skyfire-xyz/skyfire-sdk": "^0.10.0",
     "agents": "^0.0.43",
     "hono": "^4.7.4",
     "jose": "^6.0.11",

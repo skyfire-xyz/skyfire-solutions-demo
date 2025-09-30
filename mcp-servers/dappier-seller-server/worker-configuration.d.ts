@@ -8,8 +8,8 @@ declare namespace Cloudflare {
         ORY_API_KEY: string;
         ORY_PROJECT_ID: string;
         JWKS_URL: string;
-        CARBONARC_SELLER_SERVICE_ID: string;
-        CARBONARC_SELLER_ID: string;
+        DAPPIER_SELLER_SERVICE_ID: string;
+        DAPPIER_SELLER_ID: string;
         JWT_ISSUER: string;
         SKYFIRE_API_BASE_URL: string;
 	}
