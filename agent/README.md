@@ -18,7 +18,7 @@ Find a dataset for pickup truck sales in US in the year 2024. Proceed with purch
 
 - **MCP Servers** (SSE transport protocol):
   - Skyfire Identity & Payment MCP Server
-  - CarbonArc MCP Server
+  - Dappier MCP Server
   - Reporting MCP Server
 
 

@@ -111,8 +111,8 @@ def load_model(cfg: dict):
     return ModelCls(**kwargs)
 
 
-# Import Carbon Arc specific implementation
-from src.carbon_arc_agent import CarbonArcStrandsAgent
+# Import Dappier specific implementation
+from src.dappier_agent import DappierStrandsAgent
 
 
 def create_agent():
@@ -124,11 +124,11 @@ def create_agent():
     with open("agent.log", 'w') as f:
         f.write("")
 
-    # Initialize the Carbon Arc agent with the model
+    # Initialize the Dappier agent with the model
     api_key = os.getenv("SKYFIRE_API_KEY", "")
 
-    # Create the Carbon Arc agent instance
-    agent = CarbonArcStrandsAgent(
+    # Create the Dappier agent instance
+    agent = DappierStrandsAgent(
         api_key=api_key,
     )
 

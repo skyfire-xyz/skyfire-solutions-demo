@@ -64,14 +64,14 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
         if (input_prompt !== "") {
           const res = [
             {
-              skyfire_receiver_username: "CarbonArc",
+              skyfire_receiver_username: "Dappier",
               seller_MCP_server_URL:
-                env.CARBONARC_MCP_SERVER_URL,
-              seller_service_ID: env.CARBONARC_SELLER_SERVICE_ID,
+                env.DAPPIER_MCP_SERVER_URL,
+              seller_service_ID: env.DAPPIER_SELLER_SERVICE_ID,
               price: "1",
               price_scheme: "pay per use",
               minimum_token_amount: "0.0001",
-              name: "CarbonArc",
+              name: "Dappier",
               description: "Has datasets for pickup trucks",
               type: "automobile",
               API_spec_or_URL: "",
