@@ -11,9 +11,9 @@ This MCP Server also has three tools -
 ## Getting Started
 
 - Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create a seller account and seller service.
-- Run the CarbonArc Seller MCP server locally. 
+- Run the Dappier Seller MCP server locally. 
 Note: 
-For this demo, Skyfire works a directory of services from which the CarbonArc MCP Server URL is fetched using find-seller tool. In the future, this could be any registry of services. The official Skyfire Identity & Payment MCP Server will use a resource to get the actual MCP server URL.
+For this demo, Skyfire works a directory of services from which the Dappier MCP Server URL is fetched using find-seller tool. In the future, this could be any registry of services. The official Skyfire Identity & Payment MCP Server will use a resource to get the actual MCP server URL.
 
 ## Installation
 
@@ -27,9 +27,9 @@ For this demo, Skyfire works a directory of services from which the CarbonArc MC
 
     ```
     # .env
-    CARBONARC_SELLER_SERVICE_ID=your_seller_service_id
+    DAPPIER_SELLER_SERVICE_ID=your_seller_service_id
     SKYFIRE_API_BASE_URL=https://api.skyfire.xyz
-    CARBONARC_MCP_SERVER_URL=your_local_carbonarc_mcp_server_url
+    DAPPIER_MCP_SERVER_URL=your_local_dappier_mcp_server_url
     ```
 
 ## Run the development server:

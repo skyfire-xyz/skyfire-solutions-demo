@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "skyfire-solutions-demo-carbonarc-seller-mcp-server-v2",
+  "name": "skyfire-solutions-demo-dappier-seller-mcp-server-v2",
   "main": "src/index.ts",
   "compatibility_date": "2025-03-10",
   "compatibility_flags": ["nodejs_compat"],
@@ -27,7 +27,7 @@
   },
   "kv_namespaces": [
     {
-      "binding": "SKYFIRE_SOLUTIONS_DEMO_CARBONARC_SELLER_MCP_SERVER_KV",
+      "binding": "SKYFIRE_SOLUTIONS_DEMO_DAPPIER_SELLER_MCP_SERVER_KV",
       "id": "d693f7cdb5e04f70a7243cdd3f897126",
     },
   ],

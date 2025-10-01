@@ -172,8 +172,8 @@ export const agentTypes = [
         description: "Skyfire Identity & Payment MCP Server",
       },
       {
-        name: "carbonarc-seller",
-        description: "CarbonArc MCP Server",
+        name: "dappier-seller",
+        description: "Dappier MCP Server",
       },
     ],
     capabilities: [

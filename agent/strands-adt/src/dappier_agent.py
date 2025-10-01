@@ -38,7 +38,7 @@ SKYFIRE_API_KEY = os.getenv("SKYFIRE_API_KEY", "")
 # System prompt for the e-commerce buyer agent
 system_prompt = """You are a e-commerce buyer agent assisting user to make a purchase.
 Generate a random UUIDv4 buyer tag for skyfire token calls.
-After you dynamically connect to a new MCP server, call mcp_client: 'action': 'list_tools', 'connection_id': 'carbonarc_seller' to see the arguments you need to use the tools from the MCP server
+After you dynamically connect to a new MCP server, call mcp_client: 'action': 'list_tools', 'connection_id': 'dappier_seller' to see the arguments you need to use the tools from the MCP server
 {additional_context}
 Remember to call the decode_jwt_token tool immediately after you recieve jwts. Do no truncate or mutate tokens.
 Whenever there is a need to create an account, use 123456S$d#d as the password
@@ -110,9 +110,9 @@ class AgentContext:
 
 
 
-class CarbonArcStrandsAgent(Agent):
+class DappierStrandsAgent(Agent):
     """
-    Carbon Arc Agent that inherits from strands Agent.
+    Dappier Agent that inherits from strands Agent.
 
     This agent supports dynamic MCP server connections with automatic reloading
     when new servers are added. It can be called directly with a message.
@@ -120,7 +120,7 @@ class CarbonArcStrandsAgent(Agent):
 
     def __init__(self, api_key: str = "", **kwargs):
         """
-        Initialize the Carbon Arc Agent.
+        Initialize the Dappier Agent.
 
         Args:
             api_key: Skyfire API key
@@ -342,7 +342,7 @@ class CarbonArcStrandsAgent(Agent):
 
 
 async def main():
-    """Main function to demonstrate the simplified Carbon Arc agent"""
+    """Main function to demonstrate the simplified Dappier agent"""
 
     # Clear the log file at startup for fresh slate
     with open("agent.log", 'w') as f:
@@ -350,10 +350,10 @@ async def main():
 
     # Initialize the agent
     api_key = os.getenv("SKYFIRE_API_KEY", "")
-    agent = CarbonArcStrandsAgent(api_key)
+    agent = DappierStrandsAgent(api_key)
 
     # Example usage
-    print("🛒 Carbon Arc Dataset Buyer Agent")
+    print("🛒 Dappier Dataset Buyer Agent")
 
     user_input = """
     Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.
