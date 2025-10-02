@@ -1,5 +1,10 @@
 # Data Analyst Strands Agent
 
+
+## Demo
+
+[Video demo](https://youtu.be/83eiH0iRWRA)
+
 ## Installation
 
 1. **Install Dependencies**:
