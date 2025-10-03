@@ -7,6 +7,7 @@ import { AgentContext } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
 
 const vercelModel = openai("gpt-4o", { structuredOutputs: true });
@@ -234,8 +235,18 @@ const getStepDescription = (step: AIStep, toolCall: ToolCall | null) => {
   return text;
 };
 
+function makeTransport(url: string, headers: Record<string, string>) {
+  if (url.endsWith("/sse")) {
+    return new SSEClientTransport(new URL(url), {
+      requestInit: {headers} 
+    });
+  }
+  return new StreamableHTTPClientTransport(new URL(url), {
+    requestInit: { headers },
+  });
+}
+
 const prepareAllTools = async (agentContext: AgentContext) => {
-  let client;
   // eslint-disable-next-line
   const clients: Record<string, any> = {};
 
@@ -245,45 +256,48 @@ const prepareAllTools = async (agentContext: AgentContext) => {
   ];
   let allTools = { ...connectMcpServerTool };
 
-  for (let i: number = 0; i < allServers?.length; i++) {
+  //process mcp servers (tools + resources)
+  for (let i = 0; i < allServers?.length; i++) {
+    const server = allServers[i];
     const localVar = "client" + i;
-    client = await experimental_createMCPClient({
-      transport: {
-        type: "sse",
-        url: allServers[i].url!,
-        headers: allServers[i].headers,
-      },
-    });
-
-    clients[localVar] = client;
-
-    const toolSet = await client.tools();
-    allTools = { ...allTools, ...toolSet };
 
     try {
-      const transport = new SSEClientTransport(new URL(allServers[i].url), {requestInit: {
-        headers: allServers[i].headers}});
+      // ---- TOOLS CLIENT ----
+      const toolsTransport = makeTransport(server.url, server.headers);
+      const toolClient = await experimental_createMCPClient({ transport: toolsTransport });
+      clients[localVar] = toolClient;
 
+      const toolSet = await toolClient.tools();
+      allTools = { ...allTools, ...toolSet };
+
+      // ---- RESOURCES CLIENT ----
+      const resourceTransport = makeTransport(server.url, server.headers);
       const mcpClient = new Client({
         name: "mcp-client",
         version: "1.0.0",
       });
+      await mcpClient.connect(resourceTransport);
 
-      await mcpClient.connect(transport);
+      const resources = await mcpClient.listResources().catch(() => null);
+      if (!resources?.resources?.length) {
+        console.warn(`${server.url} has no resources (skipping).`);
+        continue;
+      }
 
-      const resources = await mcpClient.listResources();
-      const resource = await mcpClient.readResource({
-        uri: resources.resources[0].uri,
-      });
+      for (const res of resources.resources) {
+        const resource = await mcpClient.readResource({ uri: res.uri });
+        console.log(
+          `Resource loaded from ${server.url}:\n`,
+          resource.contents[0].text
+        );
 
-      agentContext.conversation_history.push({
-        role: "system",
-        content: `${resource.contents[0].text}`,
-      });
-    }
-    catch (err) {
-      console.log(`There are no resources available in ${allServers[i].url}`);
-      console.error(err);
+        agentContext.conversation_history.push({
+          role: "system",
+          content: `${resource.contents[0].text}`,
+        });
+      }
+    } catch (err) {
+      console.error(`Unexpected error accessing resources for ${server.url}:`, err);
     }
   }
   return allTools;
