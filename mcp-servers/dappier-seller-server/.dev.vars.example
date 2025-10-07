@@ -1,7 +1,0 @@
-DAPPIER_SELLER_ID=your_seller_id
-JWKS_URL=https://api.skyfire.xyz/.well-known/jwks.json
-ORY_API_KEY=your_ory_api_key
-ORY_PROJECT_ID=your_ory_project_id
-SKYFIRE_API_KEY=your_dappier_seller_api_key
-JWT_ISSUER=https://app.skyfire.xyz
-SKYFIRE_API_BASE_URL=https://api.skyfire.xyz

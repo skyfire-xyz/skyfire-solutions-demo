@@ -1,21 +1,5 @@
-node_modules
-
-# Logs
-logs
-*.log
-
-# Local env files
 .env
-.env.*
-!.env.example
-
-.vercel
-.wrangler/
-
-
-.nx/cache
-.nx/workspace-data
-
-.vscode/
-
-.dev.vars
+node_modules/
+build/
+tsconfig.tsbuildinfo
+.npmrc

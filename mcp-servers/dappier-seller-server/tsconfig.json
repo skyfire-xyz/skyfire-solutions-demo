@@ -1,22 +1,34 @@
 {
-	"compilerOptions": {
-		"target": "es2021",
-		"lib": ["es2021"],
-		"jsx": "react-jsx",
-		"module": "es2022",
-		"moduleResolution": "Bundler",
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"checkJs": false,
-		"noEmit": true,
-		"isolatedModules": true,
-		"allowSyntheticDefaultImports": true,
-		"forceConsistentCasingInFileNames": true,
-		"strict": true,
-		"skipLibCheck": true,
-		"types": [
-			"@cloudflare/workers-types/2023-07-01"
-		]
-	},
-	"include": ["worker-configuration.d.ts", "src/**/*.ts"]
+  "extends": "@skyfire-xyz/tsconfig/node20.json",
+  "ts-node": {
+    "transpileOnly": true,
+    "files": false,
+  },
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": true,
+    "composite": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "outDir": "./build",
+    "rootDir": "./src",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "esnext",
+    ],
+    "resolveJsonModule": true,
+    "types": [
+      "node",
+      "express",
+      "pino"
+    ],
+    "baseUrl": "./",
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
