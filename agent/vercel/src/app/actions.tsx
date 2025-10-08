@@ -6,7 +6,6 @@ import { generateText, experimental_createMCPClient, jsonSchema, type StepResult
 import { AgentContext } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
 
@@ -236,11 +235,6 @@ const getStepDescription = (step: AIStep, toolCall: ToolCall | null) => {
 };
 
 function makeTransport(url: string, headers: Record<string, string>) {
-  if (url.endsWith("/sse")) {
-    return new SSEClientTransport(new URL(url), {
-      requestInit: {headers} 
-    });
-  }
   return new StreamableHTTPClientTransport(new URL(url), {
     requestInit: { headers },
   });
