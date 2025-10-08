@@ -52,10 +52,11 @@ Steps to be followed for setting up Ory:
 ## Contents: 
 
 - MCP Servers:
-The following MCP servers are based on the SSE transport protocol.
-1. Skyfire Identity & Payment MCP Server
-2. Dappier MCP Server
-3. Reporting MCP Server
+The following MCP servers are based on the HTTP streamable transport protocol.
+1. Dappier MCP Server
+2. Reporting MCP Server
+
+For the skyfire mcp you will be using https://mcp-qa.skyfire.xyz/mcp as the endpoint to connect to. Enter it as the value for the environment variable SKYFIRE_MCP_URL.
 
 - Data Analyst Agent
 
