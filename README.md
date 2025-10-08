@@ -57,9 +57,8 @@ The following MCP servers are based on the HTTP streamable transport protocol.
 2. Reporting MCP Server
 3. Skyfire Identity & Payment MCP Server
 
-For the skyfire mcp you will be using https://mcp-qa.skyfire.xyz/mcp as the endpoint to connect to. Enter it as the value for the environment variable SKYFIRE_MCP_URL.
+- For the skyfire mcp you will be using https://mcp-qa.skyfire.xyz/mcp as the endpoint to connect to. Enter it as the value for the environment variable SKYFIRE_MCP_URL.
 
-- Data Analyst Agent
 
 ## Installation Steps
 
