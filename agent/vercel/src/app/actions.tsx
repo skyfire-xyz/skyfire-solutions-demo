@@ -118,7 +118,7 @@ export async function getAgent(
         {
           role: "system",
           content:
-            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, you must stop agent execution immediately-- there should be no subsequent tools executed. Whenever there is a need to create an account, use 123456S$d#d as the password. Do no truncate or mutate tokens. Use the Ory version of the service. Remember, creating a KYA+PAY or PAY token does not complete the purchase; you must still deliver the token in a request to the seller service to complete the transaction."
+            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, you must stop agent execution immediately-- there should be no subsequent tools executed. Whenever there is a need to create an account, use 123456S$d#d as the password. Do no truncate or mutate tokens. Use the Ory version of the service."
             // For the scope of this demo, the agent is instructed to use a static password for account creation and login. As an improvisation in future, the agent could randomly generate a password and store in agent memory and also share it with human using secure password services like 1Password, Keeper etc.
         },
       ],
