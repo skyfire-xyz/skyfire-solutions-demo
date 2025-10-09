@@ -2,6 +2,8 @@ import asyncio
 import nest_asyncio
 import json
 import os
+import sys
+import warnings
 from pydantic import AnyUrl
 from autogen_ext.tools.mcp import SseServerParams, StreamableHttpServerParams, mcp_server_tools
 from autogen_agentchat.agents import AssistantAgent
@@ -16,6 +18,33 @@ from typing import Dict, Any
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Suppress RuntimeWarnings from nest_asyncio and anyio conflicts
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+# Suppress unraisable exceptions from httpcore/anyio cleanup conflicts with nest_asyncio
+# These errors are harmless and occur during garbage collection when HTTP connections close
+def custom_unraisablehook(unraisable):
+    """Custom handler to suppress known cleanup errors from nest_asyncio + anyio conflicts"""
+    exc = unraisable.exc_value
+    if exc is None:
+        return
+    
+    exc_type = type(exc).__name__
+    exc_msg = str(exc)
+    
+    # Suppress known cleanup errors from HTTP connections and anyio
+    if exc_type == "RuntimeError" and (
+        "async generator ignored GeneratorExit" in exc_msg or
+        "Attempted to exit cancel scope in a different task" in exc_msg or
+        "no running event loop" in exc_msg
+    ):
+        return  # Silently ignore these specific errors
+    
+    # For other exceptions, use the default handler
+    sys.__unraisablehook__(unraisable)
+
+sys.unraisablehook = custom_unraisablehook
 
 nest_asyncio.apply()
 
