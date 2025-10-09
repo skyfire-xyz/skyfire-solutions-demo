@@ -17,7 +17,6 @@ from contextlib import ExitStack
 import time
 import traceback
 from mcp import ClientSession, types
-from mcp.client.sse import sse_client
 from pydantic import AnyUrl
 
 load_dotenv()
@@ -32,7 +31,7 @@ Generate a random UUIDv4 buyer tag for skyfire token calls.
 After you dynamically connect to a new MCP server, call mcp_client: 'action': 'list_tools', 'connection_id': 'dappier_seller' to see the arguments you need to use the tools from the MCP server
 {additional_context}
 Remember to call the decode_jwt_token tool immediately after you receive jwts. Do no truncate or mutate tokens.
-Whenever there is a need to create an account, use 123456S$d#d as the password
+Whenever there is a need to create an account, use 123456S$d#d as the password. Use the Ory version of the service.
 """
 
 
@@ -138,34 +137,37 @@ class DappierStrandsAgent:
     async def _get_all_resources(self, url: str, headers: Dict[str, str] = None) -> str:
         """Get all resources from an MCP server"""
         try:
+            # Determine which client to use based on URL
             if '/sse' in url.lower():
-                async with sse_client(url, headers or {}) as (read, write):
-                    async with ClientSession(read, write) as session:
-                        # Initialize the connection
-                        await session.initialize()
-                        try:
-                            # List available resources
-                            resources = await session.list_resources()
-                            print(f"Available resources: {[r.uri for r in resources.resources]}")
-
-                            # Collect all resources
-                            all_resource_texts = []
-                            for resource in resources.resources:
-                                try:
-                                    resource_content = await session.read_resource(AnyUrl(resource.uri))
-                                    content_block = resource_content.contents[0]
-                                    if isinstance(content_block, types.TextResourceContents):
-                                        all_resource_texts.append(f"Resource {resource.uri}: {content_block.text}")
-                                except Exception as e:
-                                    print(f"Failed to read resource {resource.uri}: {e}")
-
-                            return "\n\n".join(all_resource_texts) if all_resource_texts else ""
-                        except Exception as e:
-                            print(f"There are no resources available in {url}: {e}")
-                            return ""
+                client_context = sse_client(url, headers or {})
             else:
-                # For HTTP transport, we'll skip resource fetching for now
-                return ""
+                client_context = streamablehttp_client(url, headers or {})
+            
+            # Get streams - handle both 2-tuple (SSE) and 3-tuple (HTTP)
+            async with client_context as streams:
+                read, write = streams[0], streams[1]  # Take first two values regardless
+                
+                async with ClientSession(read, write) as session:
+                    # Initialize the connection
+                    await session.initialize()
+                    try:
+                        # List available resources
+                        resources = await session.list_resources()
+                        print(f"Available resources from {url}: {[r.uri for r in resources.resources]}")
+                        # Collect all resources
+                        all_resource_texts = []
+                        for resource in resources.resources:
+                            try:
+                                resource_content = await session.read_resource(AnyUrl(resource.uri))
+                                content_block = resource_content.contents[0]
+                                if isinstance(content_block, types.TextResourceContents):
+                                    all_resource_texts.append(f"Resource {resource.uri}: {content_block.text}")
+                            except Exception as e:
+                                print(f"Failed to read resource {resource.uri}: {e}")
+                        return "\n\n".join(all_resource_texts) if all_resource_texts else ""
+                    except Exception as e:
+                        print(f"No resources available from {url}: {e}")
+                        return ""
         except Exception as e:
             print(f"Error fetching resources from {url}: {e}")
             return ""
@@ -292,14 +294,13 @@ async def main():
     Find a dataset for pickup truck sales in US in the year 2024. If dataset cost is under my budget of $0.005 then proceed with purchasing dataset and finally retrieve the contents and summarize the dataset before making a presentation.
     """
 
-    try:
+
         # Use the simplified restart functionality
-        result = await agent.run(user_input)
+    result = await agent.run(user_input)
 
-        print(f"\nAgent Response: {result}")
+    print(f"\nAgent Response: {result}")
 
-    except Exception as e:
-        print(f"Error running agent: {e}")
+
 
 
 if __name__ == "__main__":
