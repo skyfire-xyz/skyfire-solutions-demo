@@ -186,36 +186,6 @@ export const config = convict({
       default: undefined,
       env: 'DATADOG_API_KEY'
     }
-  },
-  redis: {
-    port: {
-      doc: 'Redis Port',
-      default: 63792,
-      required: true,
-      format: Number,
-      env: 'REDIS_PORT'
-    },
-    host: {
-      doc: 'Redis Hostname',
-      required: true,
-      default: 'localhost',
-      format: String,
-      env: 'REDIS_HOST'
-    },
-    user: {
-      doc: 'Redis Username',
-      required: false,
-      nullable: true,
-      default: null,
-      env: 'REDIS_USER'
-    },
-    password: {
-      doc: 'Redis Password',
-      required: false,
-      nullable: true,
-      default: null,
-      env: 'REDIS_PASSWORD'
-    }
   }
 })
 

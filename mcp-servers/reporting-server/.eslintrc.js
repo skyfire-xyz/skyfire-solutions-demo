@@ -25,7 +25,6 @@ module.exports = {
         ]
       }
     ],
-    // todo: change this to error
     'import/order': ['warn'],
     '@typescript-eslint/strict-boolean-expressions': ['off']
   },

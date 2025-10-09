@@ -13,8 +13,6 @@ export interface RawBodyRequest extends Request {
 
 export function makeApp(): Express {
   const app = express()
-  // app.use(corsMiddleware) // TODO: do we need to worry about CORS
-  // TODO: get this working
   app.use(
     json({
       limit: payloadLimit,
@@ -33,14 +31,6 @@ export function makeApp(): Express {
   app.use(hsts())
   app.use(noSniff())
   app.use(hidePoweredBy())
-  // TODO: re-add w/ MCP server session store
-  // app.use((_, __, next) => {
-  //   const contextData = new Map()
-  //   // create a context store to store current user for logs
-  //   contextStore.run(contextData, () => {
-  //     next()
-  //   })
-  // })
   app.use(logRequestForAnalytics)
   app.get('/', (_req, res) => {
     res.send('OK')

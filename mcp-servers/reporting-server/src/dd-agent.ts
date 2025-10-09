@@ -10,11 +10,7 @@ if (config.get('datadog').enabled) {
       hostname: config.get('datadog').statsdHost
     },
     version: config.get('render').gitCommit ?? process.env.GIT_COMMIT,
-    tags: {
-      // 'git.commit.sha':
-      // config.get('render').gitCommit ?? process.env.GIT_COMMIT,
-      // 'git.repository_url': 'github.com/skyfire-xyz/sky-mcp'
-    }
+    tags: {}
   }
   tracer.use('openai')
   tracer.init(options)

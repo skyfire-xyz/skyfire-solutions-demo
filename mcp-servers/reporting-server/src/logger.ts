@@ -106,7 +106,6 @@ export const logger: Logger = pino({
   mixin(_mergeObject, level) {
     return {
       levelName: logger.levels.labels[level]
-      // usr: getContextStoreUser()  // TODO fill in context from mcp server session info
     }
   },
   serializers: {
