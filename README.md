@@ -54,7 +54,7 @@ Steps to be followed for setting up Ory:
 - MCP Servers:
 The following MCP servers are based on the StreamableHTTP transport protocol.
 1. Skyfire Identity & Payment MCP Server
-   - The Skyfire Identity & Payment MCP server is deployed at `https://mcp-qa.skyfire.xyz/mcp` and can be configured by setting `SKYFIRE_MCP_URL` env variable.
+   - Official Skyfire Identity & Payment MCP server is deployed [here](https://mcp.skyfire.xyz/mcp) and can be configured by setting SKYFIRE_MCP_URL env variable.
 2. Dappier MCP Server (in mcp-servers folder)
 3. Reporting MCP Server (in mcp-servers folder)
 

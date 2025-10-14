@@ -25,7 +25,7 @@ Steps to be followed for setting up Ory:
     ```bash
     npm install
     ```
-2. Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create seller account and seller services.
+2. Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create seller account and seller services for Dappier.
 3. Git clone Ory MCP repo from [here](https://github.com/ory/mcp) and use npm link to tie [mcp-access-control](https://github.com/ory/mcp/tree/main/packages/mcp-access-control) package with this server. This will be a npm package in a few days.
 4. Set up environment variables:
     Create a `.dev.vars` file in the root directory. You can copy `.dev.vars.example` if one exists, or add the necessary variables manually.
