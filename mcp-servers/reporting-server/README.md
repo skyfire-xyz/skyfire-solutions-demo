@@ -60,20 +60,18 @@ Setting up Google Apps Script is only required for the flow wherein a presentati
 1.  Install dependencies:
     ```bash
     cd reporting-mcp-server
-    npm install
+    yarn install
     ```
 2.  Set up environment variables:
-    Create a `.dev.vars` file in the root directory. You can copy `.dev.vars.example` if one exists, or add the necessary variables manually.
+    Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```
-    # .dev.vars
+    # .env
     DEPLOYED_GOOGLE_APPS_SCRIPT_URL=your_google_apps_script_deployment_url
     ```
 
 ## Run the development server:
 
 ```bash
-npm run dev
+yarn start
 ```
-
-The MCP server will run on [http://localhost:8790/sse](http://localhost:8790/sse).

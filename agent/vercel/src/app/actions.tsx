@@ -6,7 +6,7 @@ import { generateText, experimental_createMCPClient, jsonSchema, type StepResult
 import { AgentContext } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
 
 const vercelModel = openai("gpt-4o", { structuredOutputs: true });
@@ -39,8 +39,8 @@ interface ToolResult {
 type AIStep = StepResult<typeof connectMcpServerTool>;
 
 const textConfig: {[key:string]: string} = {
-  "find-seller":
-    "I will use Skyfire's find-seller tool to find a seller for the requested data & retrieve the MCP server URL of the seller",
+  "find-sellers":
+    "I will use Skyfire's find-sellers tool to find a seller for the requested data & retrieve the MCP server URL of the seller",
   "create-kya-token":
     "I will use Skyfire's create-kya-token tool to create a KYA token for myself",
   "create-payment-token":
@@ -50,7 +50,7 @@ const textConfig: {[key:string]: string} = {
   "search-dataset":
     "I will use Dappier's search-dataset tool to find the right dataset",
   "get-pricing":
-    "I will use Dappier's get-pricing tool to get the price of dataset ",
+    "I will use Dappier's get-pricing tool to get the price of dataset",
   "download-dataset":
     "I will use Dappier's download-dataset tool to pay Dappier and get the download URL of the data",
   "retrieve-file-content":
@@ -62,7 +62,7 @@ const textConfig: {[key:string]: string} = {
 
 const connectMcpServerTool = {
   "connect-mcp-server-tool": {
-    description: "Connects to the seller MCP server URL",
+    description: "Connects to the seller MCP server URL. After calling this tool, stop agent execution immediately after.",
     parameters: jsonSchema({
       type: "object",
       properties: {
@@ -83,7 +83,7 @@ const connectMcpServerTool = {
         content: [
           {
             type: "text",
-            text: `Connecting to ${sellerName} MCP server from ${mcpServerUrl}`,
+            text: `Connecting to ${sellerName} MCP server from ${mcpServerUrl}. Stopping and restarting agent to connect to tools provided by the seller.`,
           },
         ],
       };
@@ -118,7 +118,7 @@ export async function getAgent(
         {
           role: "system",
           content:
-            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, stop the processing. Whenever there is a need to create an account, use 123456S$d#d as the password. Do no truncate or mutate tokens."
+            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, you must stop agent execution immediately-- there should be no subsequent tools executed. Whenever there is a need to create an account, use 123456S$d#d as the password. Do no truncate or mutate tokens. Use the Ory version of the service."
             // For the scope of this demo, the agent is instructed to use a static password for account creation and login. As an improvisation in future, the agent could randomly generate a password and store in agent memory and also share it with human using secure password services like 1Password, Keeper etc.
         },
       ],
@@ -228,14 +228,19 @@ const getStepDescription = (step: AIStep, toolCall: ToolCall | null) => {
   if (toolCall) {
     text = textConfig[toolCall.toolName] || text;
     if (toolCall.toolName === "get-pricing") {
-      text = text + toolCall.args["dataset_id"];
+      text = text + toolCall.args["datasetId"];
     }
   }
   return text;
 };
 
+function makeTransport(url: string, headers: Record<string, string>) {
+  return new StreamableHTTPClientTransport(new URL(url), {
+    requestInit: { headers },
+  });
+}
+
 const prepareAllTools = async (agentContext: AgentContext) => {
-  let client;
   // eslint-disable-next-line
   const clients: Record<string, any> = {};
 
@@ -245,45 +250,48 @@ const prepareAllTools = async (agentContext: AgentContext) => {
   ];
   let allTools = { ...connectMcpServerTool };
 
-  for (let i: number = 0; i < allServers?.length; i++) {
+  //process mcp servers (tools + resources)
+  for (let i = 0; i < allServers?.length; i++) {
+    const server = allServers[i];
     const localVar = "client" + i;
-    client = await experimental_createMCPClient({
-      transport: {
-        type: "sse",
-        url: allServers[i].url!,
-        headers: allServers[i].headers,
-      },
-    });
-
-    clients[localVar] = client;
-
-    const toolSet = await client.tools();
-    allTools = { ...allTools, ...toolSet };
 
     try {
-      const transport = new SSEClientTransport(new URL(allServers[i].url), {requestInit: {
-        headers: allServers[i].headers}});
+      // ---- TOOLS CLIENT ----
+      const toolsTransport = makeTransport(server.url, server.headers);
+      const toolClient = await experimental_createMCPClient({ transport: toolsTransport });
+      clients[localVar] = toolClient;
 
+      const toolSet = await toolClient.tools();
+      allTools = { ...allTools, ...toolSet };
+
+      // ---- RESOURCES CLIENT ----
+      const resourceTransport = makeTransport(server.url, server.headers);
       const mcpClient = new Client({
         name: "mcp-client",
         version: "1.0.0",
       });
+      await mcpClient.connect(resourceTransport);
 
-      await mcpClient.connect(transport);
+      const resources = await mcpClient.listResources().catch(() => null);
+      if (!resources?.resources?.length) {
+        console.warn(`${server.url} has no resources (skipping).`);
+        continue;
+      }
 
-      const resources = await mcpClient.listResources();
-      const resource = await mcpClient.readResource({
-        uri: resources.resources[0].uri,
-      });
+      for (const res of resources.resources) {
+        const resource = await mcpClient.readResource({ uri: res.uri });
+        console.log(
+          `Resource loaded from ${server.url}:\n`,
+          resource.contents[0].text
+        );
 
-      agentContext.conversation_history.push({
-        role: "system",
-        content: `${resource.contents[0].text}`,
-      });
-    }
-    catch (err) {
-      console.log(`There are no resources available in ${allServers[i].url}`);
-      console.error(err);
+        agentContext.conversation_history.push({
+          role: "system",
+          content: `${resource.contents[0].text}`,
+        });
+      }
+    } catch (err) {
+      console.error(`Unexpected error accessing resources for ${server.url}:`, err);
     }
   }
   return allTools;
@@ -307,7 +315,8 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
         if ( 
           toolCall &&
           (toolCall.toolName === "create-payment-token" ||
-            toolCall.toolName === "create-kya-token" ||
+            toolCall.toolName === "create-kya-token" || 
+            toolCall.toolName === "create-pay-token" ||
             toolCall.toolName === "create-account-and-login"
             )
         ) {

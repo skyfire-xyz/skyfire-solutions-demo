@@ -2,8 +2,10 @@ import asyncio
 import nest_asyncio
 import json
 import os
+import sys
+import warnings
 from pydantic import AnyUrl
-from autogen_ext.tools.mcp import SseServerParams, mcp_server_tools
+from autogen_ext.tools.mcp import SseServerParams, StreamableHttpServerParams, mcp_server_tools
 from autogen_agentchat.agents import AssistantAgent
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_core.memory import ListMemory, MemoryContent
@@ -11,10 +13,38 @@ from autogen_core import CancellationToken
 from autogen_core.tools import FunctionTool
 from mcp import ClientSession, types
 from mcp.client.sse import sse_client
+from mcp.client.streamable_http import streamablehttp_client
 from typing import Dict, Any
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Suppress RuntimeWarnings from nest_asyncio and anyio conflicts
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+# Suppress unraisable exceptions from httpcore/anyio cleanup conflicts with nest_asyncio
+# These errors are harmless and occur during garbage collection when HTTP connections close
+def custom_unraisablehook(unraisable):
+    """Custom handler to suppress known cleanup errors from nest_asyncio + anyio conflicts"""
+    exc = unraisable.exc_value
+    if exc is None:
+        return
+    
+    exc_type = type(exc).__name__
+    exc_msg = str(exc)
+    
+    # Suppress known cleanup errors from HTTP connections and anyio
+    if exc_type == "RuntimeError" and (
+        "async generator ignored GeneratorExit" in exc_msg or
+        "Attempted to exit cancel scope in a different task" in exc_msg or
+        "no running event loop" in exc_msg
+    ):
+        return  # Silently ignore these specific errors
+    
+    # For other exceptions, use the default handler
+    sys.__unraisablehook__(unraisable)
+
+sys.unraisablehook = custom_unraisablehook
 
 nest_asyncio.apply()
 
@@ -96,13 +126,13 @@ async def connects_to_mcp_server(mcpServerUrl: str, sellerName: str) -> str:
 connect_mcp_server_tool = FunctionTool(connects_to_mcp_server, description="Connects to the seller MCP server URL")
 agent_context = {
     "available_mcp_servers": [
-        SseServerParams(
+        StreamableHttpServerParams(
             url = os.getenv("SKYFIRE_MCP_SERVER_URL"),
             headers = {
                 "skyfire-api-key": os.getenv("SKYFIRE_API_KEY")
             },
         ),
-        SseServerParams(
+        StreamableHttpServerParams(
             url = os.getenv("REPORTING_MCP_SERVER_URL"),
             headers = {}
         )
@@ -196,7 +226,7 @@ async def checkAndUpdateAgentContextIfMCPConnectionIsInitiated(result) -> bool:
             for content in message.content:
                 if content.name == 'connects_to_mcp_server':
                     new_tools_found = True
-                    agent_context["dynamically_mounted_server"] = [SseServerParams(url = json.loads(content.arguments)["mcpServerUrl"], headers = {})]
+                    agent_context["dynamically_mounted_server"] = [StreamableHttpServerParams(url = json.loads(content.arguments)["mcpServerUrl"], headers = {})]
                     await memory.add(MemoryContent(
                         content="Role: Assistant, Text: You are now connected to the tools provided by the seller MCP server as well, run tools as per input prompt to solve problems step by step.",
                         mime_type="text/plain",
@@ -207,20 +237,31 @@ async def checkAndUpdateAgentContextIfMCPConnectionIsInitiated(result) -> bool:
     return new_tools_found
 
 async def get_all_resources(url, headers) -> str:
-    async with sse_client(url, headers) as (read, write):
-        async with ClientSession(read, write) as session:
-            # Initialize the connection
-            await session.initialize()
-            try:
-                # List available resources
-                resources = await session.list_resources()
-                # Read a resource
-                resource_content = await session.read_resource(AnyUrl(resources.resources[0].uri))
-                content_block = resource_content.contents[0]
-                if isinstance(content_block, types.TextResourceContents):
-                    return content_block.text
-            except:
-                return ""
+    """Get all resources from an MCP server using appropriate client based on URL"""
+    try:
+
+        client_context = streamablehttp_client(url, headers or {})
+        
+        # Get streams - handle both 2-tuple (SSE) and 3-tuple (HTTP)
+        async with client_context as streams:
+            read, write = streams[0], streams[1]  # Take first two values regardless
+            
+            async with ClientSession(read, write) as session:
+                # Initialize the connection
+                await session.initialize()
+                try:
+                    # List available resources
+                    resources = await session.list_resources()
+                    # Read a resource
+                    resource_content = await session.read_resource(AnyUrl(resources.resources[0].uri))
+                    content_block = resource_content.contents[0]
+                    if isinstance(content_block, types.TextResourceContents):
+                        return content_block.text
+                except:
+                    return ""
+    except Exception as e:
+        print(f"Error fetching resources from {url}: {e}")
+        return ""
 
 async def initial_run():
     await memory.add(MemoryContent(

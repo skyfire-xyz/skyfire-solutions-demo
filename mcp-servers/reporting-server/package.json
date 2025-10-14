@@ -1,32 +1,57 @@
 {
-  "name": "skyfire-solutions-demo-reporting-mcp-server-v2",
-  "version": "0.0.0",
+  "name": "reporting-mcp",
+  "title": "Reporting MCP",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
   "private": true,
+  "description": "The Reporting MCP Server",
+  "author": "Skyfire",
+  "main": "build/index.js",
+  "engine": {
+    "node": ">=20.16.0"
+  },
+  "bin": {
+    "reporting-mcp": "./build/index.js"
+  },
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev  --port=8790",
-    "format": "biome format --write",
-    "lint:fix": "biome lint --fix",
-    "start": "wrangler dev",
-    "cf-typegen": "wrangler types"
+    "start": "NODE_PATH=./build node --enable-source-maps build/server.js",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js}\"",
+    "format-check": "prettier --check \"src/**/*.{ts,js}\"",
+    "lint": "yarn eslint src --ext ts --max-warnings 0",
+    "dev": "NODE_PATH=./ nodemon --watch src -e ts -x 'ts-node src/server.ts'"
+  },
+  "files": [
+    "build"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.12.1",
+    "@skyfire-xyz/prettier-config-node": "^3.0.0",
+    "@skyfire-xyz/tsconfig": "^2.0.0",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.3",
+    "agents": "^0.0.43",
+    "axios": "^1.10.0",
+    "convict": "^6.2.4",
+    "dd-trace": "^5.56.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "openapi-fetch": "^0.14.0",
+    "pino": "^9.7.0",
+    "pino-datadog-transport": "^3.0.6",
+    "pino-http": "^10.5.0",
+    "typescript": "^5.8.3",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250415.0",
-    "marked": "^15.0.7",
-    "nx": "20.8.0",
-    "typescript": "^5.5.2",
-    "workers-mcp": "^0.1.0-3",
-    "wrangler": "^4.11.0"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.787.0",
-    "@aws-sdk/lib-storage": "^3.787.0",
-    "@cloudflare/workers-oauth-provider": "^0.0.2",
-    "@modelcontextprotocol/sdk": "^1.7.0",
-    "agents": "^0.0.43",
-    "hono": "^4.7.4",
-    "multer": "^1.4.5-lts.2",
-    "zod": "^3.24.2"
-  },
-  "nx": {}
+    "@skyfire-xyz/eslint-config-node": "^3.2.1",
+    "@types/convict": "^6.1.6",
+    "eslint": "^8.50.0",
+    "nodemon": "^3.1.10",
+    "pino-pretty": "^13.0.0",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
+  }
 }
