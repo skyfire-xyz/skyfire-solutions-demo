@@ -13,7 +13,7 @@ A dataset for pickup truck sales
 ```
 
 ## Live Demo Link
-You can play with the live demo [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
+You can play with the live demo [here](https://data-analyst-agent-demo.skyfire.xyz/).
 
 ## Flow
 
@@ -78,4 +78,4 @@ The following MCP servers are based on the StreamableHTTP transport protocol.
   - Use the values saved during Skyfire and Ory setup
 
 ## Note:
-Take a look at the live demo [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
+Take a look at the live demo [here](https://data-analyst-agent-demo.skyfire.xyz/).

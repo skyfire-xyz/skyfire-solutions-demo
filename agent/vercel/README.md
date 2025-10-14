@@ -13,7 +13,7 @@ Purchase a dataset for pickup truck sales
 ``` 
 
 ## Live Demo Link
-This demo agent is available [here](https://data-analyst-agent-demo-74464367970.us-central1.run.app).
+This demo agent is available [here](https://data-analyst-agent-demo.skyfire.xyz/).
 
 ## Installation
 
