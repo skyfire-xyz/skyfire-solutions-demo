@@ -228,7 +228,7 @@ const getStepDescription = (step: AIStep, toolCall: ToolCall | null) => {
   if (toolCall) {
     text = textConfig[toolCall.toolName] || text;
     if (toolCall.toolName === "get-pricing") {
-      text = text + toolCall.args["dataset_id"];
+      text = text + toolCall.args["datasetId"];
     }
   }
   return text;
@@ -315,7 +315,8 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
         if ( 
           toolCall &&
           (toolCall.toolName === "create-payment-token" ||
-            toolCall.toolName === "create-kya-token" ||
+            toolCall.toolName === "create-kya-token" || 
+            toolCall.toolName === "create-pay-token" ||
             toolCall.toolName === "create-account-and-login"
             )
         ) {
