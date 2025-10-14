@@ -31,7 +31,7 @@ Steps to be followed for setting up Ory:
     Create a `.env` file in the directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```
-    # .dev.vars
+    # .env
     DAPPIER_SELLER_SERVICE_ID=your_seller_service_id
     JWKS_URL=https://api.skyfire.xyz/.well-known/jwks.json
     ORY_API_KEY=your_ory_api_key
