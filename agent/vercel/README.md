@@ -19,7 +19,7 @@ This demo agent is available [here](https://data-analyst-agent-demo-74464367970.
 
 1.  Install dependencies:
     ```bash
-    npm install
+    yarn install
     ```
 2. Setup OpenAI account and get API key for LLM
 3. Set up environment variables:
@@ -39,7 +39,7 @@ This demo agent is available [here](https://data-analyst-agent-demo-74464367970.
 Run the development server:
 
 ```bash
-npm run dev
+yarn start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

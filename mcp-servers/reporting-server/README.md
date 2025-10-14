@@ -60,7 +60,7 @@ Setting up Google Apps Script is only required for the flow wherein a presentati
 1.  Install dependencies:
     ```bash
     cd reporting-mcp-server
-    npm install
+    yarn install
     ```
 2.  Set up environment variables:
     Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
@@ -73,5 +73,5 @@ Setting up Google Apps Script is only required for the flow wherein a presentati
 ## Run the development server:
 
 ```bash
-npm run dev
+yarn start
 ```
