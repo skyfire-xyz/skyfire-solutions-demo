@@ -39,8 +39,8 @@ interface ToolResult {
 type AIStep = StepResult<typeof connectMcpServerTool>;
 
 const textConfig: {[key:string]: string} = {
-  "find-seller":
-    "I will use Skyfire's find-seller tool to find a seller for the requested data & retrieve the MCP server URL of the seller",
+  "find-sellers":
+    "I will use Skyfire's find-sellers tool to find a seller for the requested data & retrieve the MCP server URL of the seller",
   "create-kya-token":
     "I will use Skyfire's create-kya-token tool to create a KYA token for myself",
   "create-payment-token":
