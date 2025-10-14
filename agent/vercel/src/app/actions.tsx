@@ -50,7 +50,7 @@ const textConfig: {[key:string]: string} = {
   "search-dataset":
     "I will use Dappier's search-dataset tool to find the right dataset",
   "get-pricing":
-    "I will use Dappier's get-pricing tool to get the price of dataset ",
+    "I will use Dappier's get-pricing tool to get the price of dataset",
   "download-dataset":
     "I will use Dappier's download-dataset tool to pay Dappier and get the download URL of the data",
   "retrieve-file-content":
