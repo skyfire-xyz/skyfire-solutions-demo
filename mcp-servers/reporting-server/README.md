@@ -63,7 +63,7 @@ Setting up Google Apps Script is only required for the flow wherein a presentati
     npm install
     ```
 2.  Set up environment variables:
-    Create a `.dev.vars` file in the root directory. You can copy `.dev.vars.example` if one exists, or add the necessary variables manually.
+    Create a `.env` file in the root directory. You can copy `.env.example` if one exists, or add the necessary variables manually.
 
     ```
     # .dev.vars
