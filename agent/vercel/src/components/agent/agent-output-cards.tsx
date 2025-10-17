@@ -75,7 +75,13 @@ export const AgentOutputCards = {
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
                       >
                         <Badge variant="secondary" className="text-xs">
-                          {step.tool}
+                          {step.tool === "retrieve-file-content" ? (
+                            <span data-tool-name="retrieve-file-content" className="retrieve-file-content-tool-badge">
+                              {step.tool}
+                            </span>
+                          ) : (
+                            step.tool
+                          )}
                         </Badge>
                       </motion.div>
                     )}
