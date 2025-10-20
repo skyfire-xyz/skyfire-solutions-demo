@@ -116,7 +116,11 @@ export const AgentOutputCards = {
             </motion.div>
           ))}
         </AnimatePresence>
-        <div className="scroll-end-marker" />
+        <div className="scroll-end-marker">
+          <div className="text-xs text-gray-400 text-center py-2 opacity-60">
+            agent has finished running
+          </div>
+        </div>
       </div>
     ),
   },
@@ -193,7 +197,11 @@ export const AgentOutputCards = {
             </motion.div>
           )}
         </AnimatePresence>
-        <div className="scroll-end-marker" />
+        <div className="scroll-end-marker">
+          <div className="text-xs text-gray-400 text-center py-2 opacity-60">
+            agent has finished running
+          </div>
+        </div>
       </div>
     ),
   },
@@ -260,7 +268,11 @@ export const AgentOutputCards = {
             </Card>
           </motion.div>
         </AnimatePresence>
-        <div className="scroll-end-marker" />
+        <div className="scroll-end-marker">
+          <div className="text-xs text-gray-400 text-center py-2 opacity-60">
+            agent has finished running
+          </div>
+        </div>
       </div>
     ),
   },
@@ -314,7 +326,11 @@ export const AgentOutputCards = {
             </motion.div>
           ))}
         </AnimatePresence>
-        <div className="scroll-end-marker" />
+        <div className="scroll-end-marker">
+          <div className="text-xs text-gray-400 text-center py-2 opacity-60">
+            agent has finished running
+          </div>
+        </div>
       </div>
     ),
   },
@@ -349,7 +365,11 @@ export const AgentOutputCards = {
             </Card>
           ))}
         </div>
-        <div className="scroll-end-marker" />
+        <div className="scroll-end-marker">
+          <div className="text-xs text-gray-400 text-center py-2 opacity-60">
+            agent has finished running
+          </div>
+        </div>
       </div>
     ),
   },
@@ -482,7 +502,11 @@ export const AgentOutputCards = {
             </motion.div>
           ))}
         </AnimatePresence>
-        <div className="scroll-end-marker" />
+        <div className="scroll-end-marker">
+          <div className="text-xs text-gray-400 text-center py-2 opacity-60">
+            agent has finished running
+          </div>
+        </div>
       </div>
     ),
   },
