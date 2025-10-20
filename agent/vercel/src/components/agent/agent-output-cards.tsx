@@ -116,6 +116,7 @@ export const AgentOutputCards = {
             </motion.div>
           ))}
         </AnimatePresence>
+        <div className="scroll-end-marker" />
       </div>
     ),
   },
@@ -192,6 +193,7 @@ export const AgentOutputCards = {
             </motion.div>
           )}
         </AnimatePresence>
+        <div className="scroll-end-marker" />
       </div>
     ),
   },
@@ -258,6 +260,7 @@ export const AgentOutputCards = {
             </Card>
           </motion.div>
         </AnimatePresence>
+        <div className="scroll-end-marker" />
       </div>
     ),
   },
@@ -311,6 +314,7 @@ export const AgentOutputCards = {
             </motion.div>
           ))}
         </AnimatePresence>
+        <div className="scroll-end-marker" />
       </div>
     ),
   },
@@ -345,6 +349,7 @@ export const AgentOutputCards = {
             </Card>
           ))}
         </div>
+        <div className="scroll-end-marker" />
       </div>
     ),
   },
@@ -477,6 +482,7 @@ export const AgentOutputCards = {
             </motion.div>
           ))}
         </AnimatePresence>
+        <div className="scroll-end-marker" />
       </div>
     ),
   },
