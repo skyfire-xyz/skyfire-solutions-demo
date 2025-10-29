@@ -320,7 +320,8 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
             toolCall.toolName === "create-account-and-login"
             )
         ) {
-          console.log("Token step ", step);
+          console.log("Token step - Tool Input:", JSON.stringify(toolCall.args, null, 2));
+          console.log("Token step - Tool Result:", JSON.stringify(toolResult, null, 2));
           try {
           const { token, jwtDecoded, isValidJWT } = getDecodedJWT(toolResult);
           if (isValidJWT) {
@@ -332,7 +333,8 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
           }
         }
         if (toolCall && toolCall.toolName === "download-dataset") {
-          console.log("Download dataset step ", step);
+          console.log("Download dataset step - Tool Input:", JSON.stringify(toolCall.args, null, 2));
+          console.log("Download dataset step - Tool Result:", JSON.stringify(toolResult, null, 2));
         }
       }
     }
