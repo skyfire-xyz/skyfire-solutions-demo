@@ -167,7 +167,6 @@ async function runAgent(
   // Format steps for display
   let formattedSteps: FormattedStep[] = [...initialFormattedSteps];
 
-  console.log("steps", steps);
   formatOutput(steps, formattedSteps);
 
   // when MCP server is discovered, newToolsFound is set to True
@@ -321,6 +320,7 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
             toolCall.toolName === "create-account-and-login"
             )
         ) {
+          console.log("Token step ", step);
           try {
           const { token, jwtDecoded, isValidJWT } = getDecodedJWT(toolResult);
           if (isValidJWT) {
@@ -331,7 +331,9 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
             console.error("Error while decoding JWT token: ", err);
           }
         }
-
+        if (toolCall && toolCall.toolName === "download-dataset") {
+          console.log("Download dataset step ", step);
+        }
       }
     }
     else {
