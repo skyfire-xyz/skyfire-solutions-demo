@@ -167,6 +167,7 @@ async function runAgent(
   // Format steps for display
   let formattedSteps: FormattedStep[] = [...initialFormattedSteps];
 
+  console.log("steps", steps);
   formatOutput(steps, formattedSteps);
 
   // when MCP server is discovered, newToolsFound is set to True
