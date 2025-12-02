@@ -25,7 +25,7 @@
     "build"
   ],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.12.1",
+    "@modelcontextprotocol/sdk": "1.24.0",
     "@skyfire-xyz/prettier-config-node": "^3.0.0",
     "@skyfire-xyz/tsconfig": "^2.0.0",
     "@types/express": "^5.0.3",
