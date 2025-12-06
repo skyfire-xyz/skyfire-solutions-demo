@@ -62,7 +62,7 @@ tqdm==4.67.1
 typer==0.16.0
 typing-inspection==0.4.1
 typing_extensions==4.14.1
-urllib3==2.5.0
+urllib3==2.6.0
 uvicorn==0.35.0
 zipp==3.23.0
 voila==0.5.9
