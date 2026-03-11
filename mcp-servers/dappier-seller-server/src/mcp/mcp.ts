@@ -18,7 +18,7 @@ const accessControl = new McpAccessControl({
   jwksUrl,
   issuer: config.get('jwtIssuer'),
   audience: config.get('dappierSellerId'),
-  claimKey: 'bid.email',
+  claimKey: 'hid.email',
   oryProjectUrl: `https://${oryProjectId}.projects.oryapis.com`,
   oryApiKey,
   schemaId: 'preset://email'
