@@ -2,7 +2,10 @@
 FROM --platform=linux/amd64 node:20.16.0-alpine3.20 as build
 
 WORKDIR /app
+ARG NPM_TOKEN
+ENV NPM_TOKEN=$NPM_TOKEN
 COPY package.json yarn.lock .npmrc ./
+RUN test -n "$NPM_TOKEN" || (echo "NPM_TOKEN is missing during Docker build" && exit 1)
 RUN yarn install --frozen-lockfile
 COPY tsconfig.json tsconfig.json
 COPY src src
