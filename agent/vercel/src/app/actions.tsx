@@ -9,7 +9,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
 
-const vercelModel = openai("gpt-4o", { structuredOutputs: true });
+const vercelModel = openai("gpt-5.4", { structuredOutputs: true });
 const modelWithTracing = wrapAISDKModel(vercelModel);
 
 interface FormattedStep {
@@ -155,7 +155,11 @@ async function runAgent(
     response,
   } = await generateText({
     model: modelWithTracing,
-    maxTokens: 5000,
+    providerOptions: {
+      openai: {
+        maxCompletionTokens: 5000,
+      },
+    },
     tools: allTools,
     maxSteps: 20,
     messages: agentContext.conversation_history,
