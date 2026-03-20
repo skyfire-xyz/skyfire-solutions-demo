@@ -264,7 +264,7 @@ function EmptyState({
                         <div className="size-4 rounded-full bg-black flex items-center justify-center">
                           <OpenAIIcon className="size-3 text-white" />
                         </div>
-                        <span className="tracking-wide">gpt-4o</span>
+                        <span className="tracking-wide">gpt-5.4</span>
                       </div>
                     </div>
                     <div className="  flex items-center gap-1  pl-1   px-[2px] py-[1px] ">
