@@ -46,7 +46,7 @@ pydantic_core==2.33.2
 Pygments==2.19.2
 PyJWT==2.10.1
 python-dotenv==1.1.1
-python-multipart==0.0.20
+python-multipart==0.0.26
 referencing==0.36.2
 regex==2024.11.6
 requests==2.32.4
