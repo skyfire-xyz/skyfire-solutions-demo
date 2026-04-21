@@ -31,7 +31,7 @@
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.3",
     "agents": "^0.0.43",
-    "axios": "^1.10.0",
+    "axios": "^1.15.0",
     "convict": "^6.2.4",
     "dd-trace": "^5.56.0",
     "dotenv": "^16.5.0",
