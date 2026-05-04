@@ -84,7 +84,7 @@ export function InputPanel({
               <div className="flex items-center gap-1.5">
                 <Label
                   className={cn(
-                    "text-xs font-medium transition-all duration-200"
+                    "text-xs font-medium transition-all duration-200",
                   )}
                 >
                   {field.label}
@@ -132,7 +132,7 @@ export function InputPanel({
                       hasMultipleTextAreas
                         ? "min-h-[150px] lg:min-h-[130px]"
                         : "min-h-[220px] lg:min-h-[240px]",
-                      hasSingleInputField && "min-h-[340px] lg:min-h-[300px]"
+                      hasSingleInputField && "min-h-[340px] lg:min-h-[300px]",
                     )}
                   />
                   <div className="absolute bottom-3 right-3 text-[11px] text-neutral-400 bg-white/80 px-1.5 py-0.5 rounded-[4px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-[0px_1px_1px_0px_rgba(0,_0,_0,_0.05),_0px_1px_1px_0px_rgba(255,_252,_240,_0.5)_inset,_0px_0px_0px_1px_hsla(0,_0%,_100%,_0.1)_inset,_0px_0px_1px_0px_rgba(28,_27,_26,_0.5)]">
@@ -258,7 +258,7 @@ function ExampleButtons({
                   className={cn(
                     "min-w-fit whitespace-nowrap text-[11px] sm:text-xs py-1 px-2.5 bg-white text-neutral-800 rounded-[6px] transition-all duration-200 hover:bg-neutral-50 active:scale-95 touch-manipulation shadow-[0px_1px_1px_0px_rgba(0,_0,_0,_0.05),_0px_1px_1px_0px_rgba(255,_252,_240,_0.5)_inset,_0px_0px_0px_1px_hsla(0,_0%,_100%,_0.1)_inset,_0px_0px_1px_0px_rgba(28,_27,_26,_0.5)] relative group",
                     index === selectedExampleIndex &&
-                      "bg-black text-white hover:bg-black/90 shadow-[0px_1px_2px_0px_rgba(38,_99,_235,_0.3),_0px_1px_1px_0px_rgba(38,_99,_235,_0.1)_inset,_0px_0px_0px_1px_rgba(38,_99,_235,_0.4)_inset] hover:shadow-[0px_2px_4px_0px_rgba(38,_99,_235,_0.25),_0px_1px_1px_0px_rgba(38,_99,_235,_0.1)_inset,_0px_0px_0px_1px_rgba(38,_99,_235,_0.4)_inset] pr-7"
+                      "bg-black text-white hover:bg-black/90 shadow-[0px_1px_2px_0px_rgba(38,_99,_235,_0.3),_0px_1px_1px_0px_rgba(38,_99,_235,_0.1)_inset,_0px_0px_0px_1px_rgba(38,_99,_235,_0.4)_inset] hover:shadow-[0px_2px_4px_0px_rgba(38,_99,_235,_0.25),_0px_1px_1px_0px_rgba(38,_99,_235,_0.1)_inset,_0px_0px_0px_1px_rgba(38,_99,_235,_0.4)_inset] pr-7",
                   )}
                   onClick={() => {
                     if (index === selectedExampleIndex) {
@@ -278,7 +278,7 @@ function ExampleButtons({
                       example.requirements;
                     return text && text.length > 30
                       ? `${text.slice(0, 30)}...`
-                      : text ?? "";
+                      : (text ?? "");
                   })()}
                   {index === selectedExampleIndex && (
                     <motion.div
@@ -312,7 +312,7 @@ function ExampleButtons({
                         },
                       }}
                       whileTap={{ scale: 0.9 }}
-                      className="absolute right-1.5 top-1 -translate-y-1/2 p-0.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200 cursor-pointer backdrop-blur-[2px] shadow-[0px_1px_1px_0px_rgba(0,_0,_0,_0.2)]"
+                      className="absolute right-1.5 top-1 p-0.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200 cursor-pointer backdrop-blur-[2px] shadow-[0px_1px_1px_0px_rgba(0,_0,_0,_0.2)]"
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
