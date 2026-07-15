@@ -12,7 +12,12 @@ import { isJWT } from "@/lib/utils";
 // LangSmith's model-wrapper API (wrapAISDKModel) was removed in langsmith >=0.8
 // in favor of wrapAISDK/telemetry, and no LangSmith credentials are configured,
 // so the model is used directly. Re-introduce tracing via the new API if needed.
-const modelWithTracing = openai("gpt-4o");
+//
+// gpt-5.4 (matching the okta/keycloak demos, per SKYK-1491) rather than gpt-4o:
+// the agent re-sends its full conversation_history each step, and large MCP tool
+// results push it past gpt-4o's 128K context window ("context_length_exceeded").
+// gpt-5.4's larger window accommodates the full purchase flow.
+const modelWithTracing = openai("gpt-5.4");
 
 interface FormattedStep {
   step: number;
