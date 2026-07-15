@@ -301,14 +301,18 @@ const prepareAllTools = async (agentContext: AgentContext) => {
 
       for (const res of resources.resources) {
         const resource = await mcpClient.readResource({ uri: res.uri });
-        console.log(
-          `Resource loaded from ${server.url}:\n`,
-          resource.contents[0].text
-        );
+        // @modelcontextprotocol/sdk >=1.29 types contents[] as a text|blob
+        // union, so guard for the text variant before reading it.
+        const firstContent = resource.contents[0];
+        const contentText =
+          firstContent && "text" in firstContent
+            ? String(firstContent.text)
+            : "";
+        console.log(`Resource loaded from ${server.url}:\n`, contentText);
 
         agentContext.conversation_history.push({
           role: "system",
-          content: `${resource.contents[0].text}`,
+          content: contentText,
         });
       }
     } catch (err) {

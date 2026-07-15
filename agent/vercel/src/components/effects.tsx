@@ -143,13 +143,13 @@ export function GlowEffect({
   scale = 1,
   duration = 5,
 }: GlowEffectProps) {
-  const BASE_TRANSITION = {
+  const BASE_TRANSITION: Transition = {
     repeat: Infinity,
     duration: duration,
     ease: "linear",
   };
 
-  const animations = {
+  const animations: Record<string, TargetAndTransition> = {
     rotate: {
       background: [
         `conic-gradient(from 0deg at 50% 50%, ${colors.join(", ")})`,

@@ -5,9 +5,12 @@ const SPRING_STIFF = 150;
 const SPRING_DAMP = 15;
 const SPRING_MASS = 1;
 
-// Custom easing curves for consistent motion
-export const EASE_CUSTOM_IN_OUT = [0.32, 0.72, 0, 1];
-export const EASE_CUSTOM_OUT = [0, 0, 0.38, 1];
+// Custom easing curves for consistent motion (cubic-bezier tuples so they
+// satisfy motion's Easing type instead of widening to number[])
+export const EASE_CUSTOM_IN_OUT: [number, number, number, number] = [
+  0.32, 0.72, 0, 1,
+];
+export const EASE_CUSTOM_OUT: [number, number, number, number] = [0, 0, 0.38, 1];
 
 // Enhanced spring configuration with better physics
 export const springTransition = {
@@ -51,7 +54,7 @@ export const slideInFromRight = {
     x: -20,
     transition: springTransition,
   },
-} as const;
+} satisfies Variants;
 
 export const slideInFromLeft = {
   initial: { opacity: 0, x: -20 },
@@ -65,7 +68,7 @@ export const slideInFromLeft = {
     x: 20,
     transition: springTransition,
   },
-} as const;
+} satisfies Variants;
 
 // Enhanced scale transition with spring physics
 export const fadeInScale = {
@@ -86,7 +89,7 @@ export const fadeInScale = {
       ease: EASE_CUSTOM_OUT,
     },
   },
-} as const;
+} satisfies Variants;
 
 // Enhanced content transition with layered animations and spring physics
 export const contentTransitionVariants: Variants = {
@@ -155,7 +158,7 @@ export const agentSelectorVariants = {
       ease: EASE_CUSTOM_OUT,
     },
   },
-};
+} satisfies Variants;
 
 // Enhanced icon animations
 export const iconSpinVariants = {
@@ -168,7 +171,7 @@ export const iconSpinVariants = {
       damping: 20,
     },
   },
-};
+} satisfies Variants;
 
 // Enhanced stagger container animation
 export const staggerContainerVariants = {
@@ -191,7 +194,7 @@ export const staggerContainerVariants = {
       staggerDirection: -1,
     },
   },
-};
+} satisfies Variants;
 
 // Enhanced stagger item animation
 export const staggerItemVariants = {
@@ -212,7 +215,7 @@ export const staggerItemVariants = {
       ease: EASE_CUSTOM_IN_OUT,
     },
   },
-};
+} satisfies Variants;
 
 // Enhanced loading animation
 export const loadingSpinnerVariants: Variants = {
@@ -258,7 +261,7 @@ export const progressBarVariants = {
       ease: EASE_CUSTOM_IN_OUT,
     },
   },
-};
+} satisfies Variants;
 
 // Panel transition variants for input and output panels
 export const panelTransitionVariants: Variants = {
