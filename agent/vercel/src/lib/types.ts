@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CoreMessage } from "ai";
+import { ModelMessage } from "ai";
 
 export type AppContextType = {
   apiKey: string;
@@ -25,7 +25,7 @@ export interface InputField {
 export interface AgentContext {
   available_mcp_servers: {url: string, headers: Record<string, string>}[], 
   dynamically_mounted_server: {url: string, headers: Record<string, string>}[],
-  conversation_history: CoreMessage[]
+  conversation_history: ModelMessage[]
 } 
 
 export interface AgentType {
@@ -120,7 +120,7 @@ export const agentResultSchema = z.object({
           z.object({
             type: z.string(),
             name: z.string(),
-            parameters: z.record(z.unknown()),
+            parameters: z.record(z.string(), z.unknown()),
             result: z.unknown().optional(),
           })
         )
@@ -133,7 +133,7 @@ export const agentResultSchema = z.object({
     z.object({
       type: z.string(),
       name: z.string(),
-      parameters: z.record(z.unknown()),
+      parameters: z.record(z.string(), z.unknown()),
       result: z.unknown().optional(),
     })
   ),
