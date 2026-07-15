@@ -332,9 +332,11 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
     if (step.toolCalls.length > 0)  {
       for (let i = 0; i < step.toolCalls.length; i++) {
         const toolCall = step.toolCalls[i] as unknown as ToolCall;
-        // AI SDK v5+ exposes the tool result payload on `.output` (was `.result`).
-        // Normalize to the legacy `{ result: { content } }` shape the UI and the
-        // JWT decoder downstream still expect.
+        // AI SDK v5+ splits the old tool-result object into `.input` (the call
+        // args) and `.output` (the payload). The UI renders step.result.args as
+        // the "Request" and step.result.result.content as the "Response", so
+        // re-assemble the legacy `{ args, result }` shape here. `toolResult`
+        // (the `{ result }` half) is what the JWT decoder consumes.
         const rawToolResult = step.toolResults[i] as unknown as {
           output?: { content: Array<{ type: string; text: string }> };
         };
@@ -347,7 +349,9 @@ const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {
           tool:
             toolCall && toolCall.toolName ? toolCall.toolName : "thinking",
           input: toolCall ? toolCall.input : {},
-          result: toolResult,
+          result: toolResult
+            ? { args: toolCall?.input ?? {}, result: toolResult.result }
+            : null,
         });
 
         if (
