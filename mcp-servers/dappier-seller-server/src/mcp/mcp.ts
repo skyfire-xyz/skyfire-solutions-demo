@@ -70,14 +70,18 @@ const createAccountAndLoginWithOry = async (
 }
 
 export class DappierMCP {
-  readonly server = new McpServer({
-    name: 'dappier-mcp-server-v1',
-    version: '0.0.1',
-    capabilities: {
-      resources: {},
-      tools: {}
+  readonly server = new McpServer(
+    {
+      name: 'dappier-mcp-server-v1',
+      version: '0.0.1'
+    },
+    {
+      capabilities: {
+        resources: {},
+        tools: {}
+      }
     }
-  })
+  )
 
   withAuth = (
     handler: (args: any, extra: any) => Promise<any> | any
