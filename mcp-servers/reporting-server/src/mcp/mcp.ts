@@ -5,14 +5,18 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { config } from '../config'
 
 export class ReportingMCP {
-  readonly server = new McpServer({
-    name: 'reporting-mcp-server-v1',
-    version: '0.0.1',
-    capabilities: {
-      resources: {},
-      tools: {}
+  readonly server = new McpServer(
+    {
+      name: 'reporting-mcp-server-v1',
+      version: '0.0.1'
+    },
+    {
+      capabilities: {
+        resources: {},
+        tools: {}
+      }
     }
-  })
+  )
 
   constructor() {
     this.init()
