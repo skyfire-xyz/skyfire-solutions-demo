@@ -16,6 +16,8 @@
   "scripts": {
     "start": "NODE_PATH=./build node --enable-source-maps build/server.js",
     "build": "tsc",
+  "test": "LOG_LEVEL=silent node --require ts-node/register --test test/*.test.ts",
+  "test:types": "tsc --noEmit -p tsconfig.test.json",
     "format": "prettier --write \"src/**/*.{ts,tsx,js}\"",
     "format-check": "prettier --check \"src/**/*.{ts,js}\"",
     "lint": "yarn eslint src --ext ts --max-warnings 0",

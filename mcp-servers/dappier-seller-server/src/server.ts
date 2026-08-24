@@ -1,6 +1,7 @@
 import logger from './logger'
 import { app } from './app'
 import { config } from './config'
+import { startSessionReaper } from './mcp/state'
 
 const appEnv = config.get('appEnv')
 const port = config.get('port')
@@ -13,7 +14,10 @@ const startServer = async (): Promise<void> => {
       logger.debug(`Server connected on port: ${port}, on env: ${appEnv}`)
     })
 
+    const sessionReaper = startSessionReaper()
+
     const gracefulShutdown = (): void => {
+      clearInterval(sessionReaper)
       server.close(() => {
         logger.debug('Gracefully closed server')
       })
