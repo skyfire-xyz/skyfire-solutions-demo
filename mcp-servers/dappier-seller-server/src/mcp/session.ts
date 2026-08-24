@@ -3,7 +3,12 @@ import { v4, validate as validateUUID } from 'uuid'
 import { Request, Response } from 'express'
 import logger from '../logger'
 import { config } from '../config'
-import { ServerState } from './state'
+import {
+  ServerState,
+  closeSession,
+  registerSession,
+  touchSession
+} from './state'
 import { DappierMCP } from './mcp'
 
 // handle when a client initializes a connection
@@ -33,7 +38,6 @@ export async function handleMcpMessageUnsafe(
   logger.info({ req, body: req.body }, 'debug handle mcp message')
 
   if (isInitRequest) {
-    
     // for new sessions, generate a unique ID
     const sessionId = v4()
 
@@ -44,10 +48,7 @@ export async function handleMcpMessageUnsafe(
     })
     const mcpServer = new DappierMCP()
     await mcpServer.server.connect(transport)
-    ServerState[sessionId] = {
-      transport,
-      expiresAt: new Date(Date.now() + 60 * 60 * 1000)
-    }
+    registerSession(sessionId, transport)
 
     // tell LLM application the session ID
     res.setHeader('Mcp-Session-Id', sessionId)
@@ -58,13 +59,13 @@ export async function handleMcpMessageUnsafe(
     // for existing sessions, get the ID from the header
     const sessionId = req.headers['mcp-session-id']
     if (sessionId === undefined) {
-        res
-          .status(401)
-          .header(
-            'www-authenticate',
-            `resource_metadata=${RESOURCE_METADATA_URL}/.well-known/oauth-protected-resource`
-          )
-        return
+      res
+        .status(401)
+        .header(
+          'www-authenticate',
+          `resource_metadata=${RESOURCE_METADATA_URL}/.well-known/oauth-protected-resource`
+        )
+      return
     }
     if (typeof sessionId !== 'string') {
       res.status(400).json({
@@ -88,6 +89,8 @@ export async function handleMcpMessageUnsafe(
       return
     }
     const { transport } = serverState
+
+    touchSession(sessionId)
 
     // handle the request using the existing transport
     await transport.handleRequest(req, res, req.body)
@@ -113,10 +116,7 @@ export async function deleteSession(
     return
   }
 
-  if (ServerState[sessionId]) {
-    // Clean up the session
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete ServerState[sessionId]
+  if (await closeSession(sessionId)) {
     res.status(204).end()
   } else {
     res.status(404).json({ error: 'Session not found' })

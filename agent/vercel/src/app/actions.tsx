@@ -5,7 +5,6 @@ import { generateText, jsonSchema, stepCountIs, type StepResult, type ToolSet } 
 import { experimental_createMCPClient } from "@ai-sdk/mcp";
 import { AgentContext } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
 
@@ -103,11 +102,9 @@ export async function getAgent(
   input: string | Record<string, string>,
   agentContext: AgentContext,
 ) {
-  console.log("apiKey", apiKey);
   if(!apiKey)
     apiKey = process.env.SKYFIRE_API_KEY || "";
 
-  console.log("apiKey", apiKey);
   // set default agent context having SKYFIRE and VISUALIZATION MCP servers
   if (!agentContext || Object.keys(agentContext).length === 0) {
     agentContext = {
@@ -145,8 +142,7 @@ async function runAgent(
   initialFormattedSteps: FormattedStep[] = []
 ) {
   // Prepare tools from all the connected MCP servers
-  // eslint-disable-next-line prefer-const
-  let allTools = await prepareAllTools(agentContext);
+  const { allTools, connections } = await prepareAllTools(agentContext);
 
   // add user prompt to agentContext
   agentContext.conversation_history.push({
@@ -166,20 +162,23 @@ async function runAgent(
     (m) => m.role !== "system",
   );
 
-  // Run agent by passing all the prepared tools and agentContext
-  const {
-    text: answer,
-    usage,
-    steps,
-    response,
-  } = await generateText({
-    model: modelWithTracing,
-    system: systemPrompt,
-    maxOutputTokens: 8000,
-    tools: allTools,
-    stopWhen: stepCountIs(20),
-    messages: nonSystemMessages,
-  });
+  // Run agent by passing all the prepared tools and agentContext.
+  // The connections must stay open for this call -- the tools execute against
+  // them -- and a recursive run below opens its own set.
+  let generated;
+  try {
+    generated = await generateText({
+      model: modelWithTracing,
+      system: systemPrompt,
+      maxOutputTokens: 8000,
+      tools: allTools,
+      stopWhen: stepCountIs(20),
+      messages: nonSystemMessages,
+    });
+  } finally {
+    await closeAllConnections(connections);
+  }
+  const { text: answer, usage, steps, response } = generated;
 
   // Update agentContext to include all the executed steps
   agentContext.conversation_history.push(...response.messages);
@@ -266,9 +265,35 @@ function makeTransport(url: string, headers: Record<string, string>) {
   });
 }
 
+type MCPClient = Awaited<ReturnType<typeof experimental_createMCPClient>>;
+
+interface MCPConnection {
+  client: MCPClient;
+  transport: StreamableHTTPClientTransport;
+}
+
+// each open client holds a socket and its session state, so an agent run that
+// leaves them open leaks both
+const closeAllConnections = async (connections: MCPConnection[]) => {
+  await Promise.all(
+    connections.map(async ({ client, transport }) => {
+      // must precede close(): close() aborts the controller the DELETE uses
+      try {
+        await transport.terminateSession();
+      } catch (err) {
+        console.error("Error terminating MCP session:", err);
+      }
+      try {
+        await client.close();
+      } catch (err) {
+        console.error("Error closing MCP client:", err);
+      }
+    }),
+  );
+};
+
 const prepareAllTools = async (agentContext: AgentContext) => {
-  // eslint-disable-next-line
-  const clients: Record<string, any> = {};
+  const connections: MCPConnection[] = [];
 
   const allServers = [
     ...agentContext?.available_mcp_servers,
@@ -279,33 +304,24 @@ const prepareAllTools = async (agentContext: AgentContext) => {
   //process mcp servers (tools + resources)
   for (let i = 0; i < allServers?.length; i++) {
     const server = allServers[i];
-    const localVar = "client" + i;
 
     try {
-      // ---- TOOLS CLIENT ----
-      const toolsTransport = makeTransport(server.url, server.headers);
-      const toolClient = await experimental_createMCPClient({ transport: toolsTransport });
-      clients[localVar] = toolClient;
+      // one client serves both tools and resources
+      const transport = makeTransport(server.url, server.headers);
+      const client = await experimental_createMCPClient({ transport });
+      connections.push({ client, transport });
 
-      const toolSet = await toolClient.tools();
+      const toolSet = await client.tools();
       allTools = { ...allTools, ...toolSet } as ToolSet;
 
-      // ---- RESOURCES CLIENT ----
-      const resourceTransport = makeTransport(server.url, server.headers);
-      const mcpClient = new Client({
-        name: "mcp-client",
-        version: "1.0.0",
-      });
-      await mcpClient.connect(resourceTransport);
-
-      const resources = await mcpClient.listResources().catch(() => null);
+      const resources = await client.listResources().catch(() => null);
       if (!resources?.resources?.length) {
         console.warn(`${server.url} has no resources (skipping).`);
         continue;
       }
 
       for (const res of resources.resources) {
-        const resource = await mcpClient.readResource({ uri: res.uri });
+        const resource = await client.readResource({ uri: res.uri });
         // @modelcontextprotocol/sdk >=1.29 types contents[] as a text|blob
         // union, so guard for the text variant before reading it.
         const firstContent = resource.contents[0];
@@ -324,7 +340,7 @@ const prepareAllTools = async (agentContext: AgentContext) => {
       console.error(`Unexpected error accessing resources for ${server.url}:`, err);
     }
   }
-  return allTools;
+  return { allTools, connections };
 };
 
 const formatOutput = (steps: AIStep[], formattedSteps: FormattedStep[]) => {

@@ -7,6 +7,16 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['test/**/*.ts'],
+      parserOptions: {
+        project: './tsconfig.test.json'
+      },
+      rules: {
+        // node:test's describe/test return promises by design
+        '@typescript-eslint/no-floating-promises': 'off'
+      }
+    },
+    {
       files: ['**/*.ts'],
       rules: {
         '@typescript-eslint/no-explicit-any': 'error',
@@ -15,6 +25,13 @@ module.exports = {
     }
   ],
   rules: {
+    // tsc and node resolve these; the import resolver can't follow the SDK's
+    // wildcard "exports" map, which routes types through dist/esm/*.d.ts and
+    // so misses the .js -> .d.ts substitution
+    'import/no-unresolved': [
+      'error',
+      { ignore: ['^@modelcontextprotocol/sdk/'] }
+    ],
     'import/no-extraneous-dependencies': [
       'error',
       {

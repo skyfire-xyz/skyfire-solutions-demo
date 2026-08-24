@@ -158,7 +158,7 @@ const httpOptions: HttpOptions = {
     }
   },
   transport: getTransport(),
-  logger: logger as any
+  logger: logger as unknown as HttpOptions['logger']
 }
 
-export const httpLogger = pinoHttp({ ...httpOptions, logger: logger as any })
+export const httpLogger = pinoHttp(httpOptions)

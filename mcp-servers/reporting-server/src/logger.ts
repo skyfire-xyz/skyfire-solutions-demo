@@ -3,7 +3,14 @@ import { DDTransportOptions } from 'pino-datadog-transport'
 import { AxiosError, isAxiosError } from 'axios'
 import { Request } from 'express'
 import { pinoHttp, Options as HttpOptions } from 'pino-http'
-import { pino, Logger, TransportMultiOptions, LoggerOptions, stdSerializers, Level } from 'pino'
+import {
+  pino,
+  Logger,
+  TransportMultiOptions,
+  LoggerOptions,
+  stdSerializers,
+  Level
+} from 'pino'
 import { AppEnv, config } from './config'
 
 export type LogLevel = Level
@@ -151,7 +158,7 @@ const httpOptions: HttpOptions = {
     }
   },
   transport: getTransport(),
-  logger: logger as any
+  logger: logger as unknown as HttpOptions['logger']
 }
 
 export const httpLogger = pinoHttp(httpOptions)

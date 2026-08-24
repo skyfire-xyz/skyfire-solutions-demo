@@ -15,8 +15,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return process.env.SKYFIRE_API_KEY || "";
   });
 
-  console.log("apiKey in app-provider", apiKey);
-
   const [agentContext, setAgentContext] = useState<AgentContext>(()  => {
     if (typeof window !== "undefined") {
       return (

@@ -1,4 +1,3 @@
-
 export interface ToolResponse {
   content: Array<{
     type: 'text'
