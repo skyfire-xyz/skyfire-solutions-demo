@@ -272,6 +272,11 @@ interface MCPConnection {
   transport: StreamableHTTPClientTransport;
 }
 
+// transport errors can carry request details, including the skyfire-api-key
+// header, so never log the raw object
+const errorMessage = (err: unknown) =>
+  err instanceof Error ? err.message : "unknown error";
+
 // each open client holds a socket and its session state, so an agent run that
 // leaves them open leaks both
 const closeAllConnections = async (connections: MCPConnection[]) => {
@@ -281,12 +286,20 @@ const closeAllConnections = async (connections: MCPConnection[]) => {
       try {
         await transport.terminateSession();
       } catch (err) {
-        console.error("Error terminating MCP session:", err);
+        console.error("Error terminating MCP session:", errorMessage(err));
       }
       try {
         await client.close();
       } catch (err) {
-        console.error("Error closing MCP client:", err);
+        console.error("Error closing MCP client:", errorMessage(err));
+      }
+      // client.close() only reaches transport.close() on its happy path, so
+      // abort the transport directly rather than relying on that; both calls
+      // are idempotent
+      try {
+        await transport.close();
+      } catch (err) {
+        console.error("Error closing MCP transport:", errorMessage(err));
       }
     }),
   );
@@ -337,7 +350,10 @@ const prepareAllTools = async (agentContext: AgentContext) => {
         });
       }
     } catch (err) {
-      console.error(`Unexpected error accessing resources for ${server.url}:`, err);
+      console.error(
+        `Unexpected error accessing resources for ${server.url}:`,
+        errorMessage(err),
+      );
     }
   }
   return { allTools, connections };

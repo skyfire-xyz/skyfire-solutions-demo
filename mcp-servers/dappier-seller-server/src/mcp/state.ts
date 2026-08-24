@@ -23,12 +23,17 @@ export function registerSession(
     expiresAt: new Date(Date.now() + SESSION_TTL_MS)
   }
 
-  // server.connect() installs its own onclose, so chain rather than replace
+  // server.connect() installs its own onclose, so chain rather than replace.
+  // finally, not catch: the entry must go even if the SDK handler throws, but
+  // the error still belongs to the caller
   const previousOnClose = transport.onclose
   transport.onclose = (): void => {
-    previousOnClose?.()
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete ServerState[sessionId]
+    try {
+      previousOnClose?.()
+    } finally {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete ServerState[sessionId]
+    }
   }
 }
 
@@ -83,7 +88,11 @@ export function startSessionReaper(
   intervalMs: number = REAP_INTERVAL_MS
 ): NodeJS.Timeout {
   const timer = setInterval(() => {
-    void reapExpiredSessions()
+    // a rejection here would be an unhandled rejection on a timer, which by
+    // default takes the process down
+    reapExpiredSessions().catch((error) => {
+      logger.error(error, 'mcp session reaper failed')
+    })
   }, intervalMs)
   timer.unref()
   return timer
