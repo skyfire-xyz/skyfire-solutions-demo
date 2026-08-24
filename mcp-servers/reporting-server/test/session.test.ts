@@ -216,6 +216,35 @@ describe('session reaper', () => {
     }
   })
 
+  test('survives a sweep that rejects', async () => {
+    const broken = {
+      close: async (): Promise<void> => {
+        throw new Error('boom')
+      }
+    }
+    ServerState.poison = {
+      transport: broken as unknown as StreamableHTTPServerTransport,
+      expiresAt: new Date(Date.now() - 1000)
+    }
+    // make the sweep itself reject, not just one transport close
+    Object.defineProperty(ServerState.poison, 'expiresAt', {
+      get: () => {
+        throw new Error('expiresAt exploded')
+      }
+    })
+
+    const reaper = startSessionReaper(20)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 150))
+      // an unhandled rejection would have torn the process down by now
+      assert.ok(true)
+    } finally {
+      clearInterval(reaper)
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete ServerState.poison
+    }
+  })
+
   test('sweeps on its interval without holding the event loop open', async () => {
     const { server, url } = await listen()
     try {
@@ -254,6 +283,24 @@ describe('registerSession', () => {
     // replacing it instead of chaining leaves the server dangling
     assert.equal(sdkHandlerRan, true)
     assert.equal(ServerState.chained, undefined)
+  })
+
+  test('removes the session even if the chained onclose throws', async () => {
+    const transport = {
+      onclose: (): void => {
+        throw new Error('sdk onclose blew up')
+      },
+      close: async (): Promise<void> => undefined
+    }
+
+    registerSession('throwing', transport as never)
+    assert.ok(ServerState.throwing !== undefined)
+
+    // the error still propagates, but the entry must not survive it
+    assert.throws(() => {
+      transport.onclose?.()
+    }, /sdk onclose blew up/)
+    assert.equal(ServerState.throwing, undefined)
   })
 
   test('deregisters the session when the transport closes', async () => {

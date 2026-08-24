@@ -16,8 +16,8 @@
   "scripts": {
     "start": "NODE_PATH=./build node --enable-source-maps build/server.js",
     "build": "tsc",
-  "test": "LOG_LEVEL=silent node --require ts-node/register --test test/*.test.ts",
-  "test:types": "tsc --noEmit -p tsconfig.test.json",
+    "test": "LOG_LEVEL=silent node --require ts-node/register --test test/*.test.ts",
+    "test:types": "tsc --noEmit -p tsconfig.test.json",
     "format": "prettier --write \"src/**/*.{ts,tsx,js}\"",
     "format-check": "prettier --check \"src/**/*.{ts,js}\"",
     "lint": "yarn eslint src --ext ts --max-warnings 0",
@@ -27,36 +27,36 @@
     "build"
   ],
   "dependencies": {
-  "@modelcontextprotocol/sdk": "1.30.0",
-  "@ory/client-fetch": "1.20.11",
-  "@skyfire-xyz/prettier-config-node": "3.0.0",
-  "@skyfire-xyz/tsconfig": "2.0.0",
-  "@types/express": "5.0.3",
-  "@types/node": "24.0.3",
-  "axios": "1.19.0",
-  "convict": "6.2.5",
-  "dd-trace": "6.10.0",
-  "dotenv": "16.5.0",
-  "express": "4.22.2",
-  "helmet": "8.1.0",
-  "jose": "6.0.11",
-  "pino": "9.7.0",
-  "pino-datadog-transport": "3.0.6",
-  "pino-http": "10.5.0",
-  "typescript": "5.8.3",
-  "uuid": "11.1.0"
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@ory/client-fetch": "1.20.11",
+    "@skyfire-xyz/prettier-config-node": "3.0.0",
+    "@skyfire-xyz/tsconfig": "2.0.0",
+    "@types/express": "5.0.3",
+    "@types/node": "24.0.3",
+    "axios": "1.19.0",
+    "convict": "6.2.5",
+    "dd-trace": "6.10.0",
+    "dotenv": "16.5.0",
+    "express": "4.22.2",
+    "helmet": "8.1.0",
+    "jose": "6.0.11",
+    "pino": "9.7.0",
+    "pino-datadog-transport": "3.0.6",
+    "pino-http": "10.5.0",
+    "typescript": "5.8.3",
+    "uuid": "11.1.0"
   },
   "devDependencies": {
-  "@skyfire-xyz/eslint-config-node": "3.2.1",
-  "@types/convict": "6.1.6",
-  "eslint": "8.50.0",
-  "nodemon": "3.1.10",
-  "pino-pretty": "13.0.0",
-  "prettier": "3.5.3",
-  "ts-node": "10.9.2",
-  "tsconfig-paths": "4.2.0"
+    "@skyfire-xyz/eslint-config-node": "3.2.1",
+    "@types/convict": "6.1.6",
+    "eslint": "8.50.0",
+    "nodemon": "3.1.10",
+    "pino-pretty": "13.0.0",
+    "prettier": "3.5.3",
+    "ts-node": "10.9.2",
+    "tsconfig-paths": "4.2.0"
   },
   "resolutions": {
-  "**/@typescript-eslint/typescript-estree/minimatch": "9.0.7"
+    "**/@typescript-eslint/typescript-estree/minimatch": "9.0.7"
   }
 }
