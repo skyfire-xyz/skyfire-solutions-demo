@@ -48,6 +48,8 @@ export interface CompletionIndicatorProps
   children?: React.ReactNode;
 }
 
+const subscribeToNothing = () => () => {};
+
 export function CompletionIndicator({
   className,
   variant,
@@ -60,11 +62,13 @@ export function CompletionIndicator({
   children,
   ...props
 }: CompletionIndicatorProps) {
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Render nothing until hydration completes. useSyncExternalStore gives the
+  // server/client split directly, without a setState-in-effect cascade.
+  const mounted = React.useSyncExternalStore(
+    subscribeToNothing,
+    () => true,
+    () => false
+  );
 
   const icons = {
     success: <CheckCircle2 className="h-4 w-4 shrink-0 fill-green-400" />,
