@@ -42,7 +42,7 @@
     "pino-datadog-transport": "3.0.6",
     "pino-http": "10.5.0",
     "typescript": "5.8.3",
-    "uuid": "11.1.0"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "@skyfire-xyz/eslint-config-node": "3.2.1",
