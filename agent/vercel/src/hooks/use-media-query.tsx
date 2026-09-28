@@ -1,25 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false);
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      const media = window.matchMedia(query);
 
-  useEffect(() => {
-    const media = window.matchMedia(query);
+      media.addEventListener("change", onStoreChange);
 
-    setMatches(media.matches);
+      return () => {
+        media.removeEventListener("change", onStoreChange);
+      };
+    },
+    [query]
+  );
 
-    const listener = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
+  const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
 
-    media.addEventListener("change", listener);
+  // The server has no viewport to measure, so render the non-matching branch
+  // and let hydration swap in the real value.
+  const getServerSnapshot = useCallback(() => false, []);
 
-    return () => {
-      media.removeEventListener("change", listener);
-    };
-  }, [query]);
-
-  return matches;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
