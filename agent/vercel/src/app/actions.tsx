@@ -7,6 +7,7 @@ import { AgentContext } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
+import { buildRateLimitedPayload, checkRateLimit } from "@/lib/rate-limit";
 
 // LangSmith's model-wrapper API (wrapAISDKModel) was removed in langsmith >=0.8
 // in favor of wrapAISDK/telemetry, and no LangSmith credentials are configured,
@@ -101,7 +102,16 @@ export async function getAgent(
   apiKey: string,
   input: string | Record<string, string>,
   agentContext: AgentContext,
-) {
+): Promise<string> {
+  const verdict = await checkRateLimit();
+  if (!verdict.allowed) {
+    return JSON.stringify(
+      buildRateLimitedPayload(verdict.retryAt, verdict.scope),
+      null,
+      2
+    );
+  }
+
   if(!apiKey)
     apiKey = process.env.SKYFIRE_API_KEY || "";
 
@@ -194,7 +204,9 @@ async function runAgent(
     agentContext
   );
 
-  // If new tools are discovered, RE-RUN the agent
+  // If new tools are discovered, RE-RUN the agent.
+  // NOTE: this recursion is still ONE user submission. The rate limit is
+  // consumed once, in getAgent, precisely because of this.
   if (newToolsFound) {
     const modelResponse = JSON.parse(
       await runAgent(apiKey, input, agentContext, formattedSteps)
