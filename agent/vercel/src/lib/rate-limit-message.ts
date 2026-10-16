@@ -1,11 +1,3 @@
-/**
- * Client-safe rate limit formatting.
- *
- * Deliberately NOT inside src/lib/rate-limit/, whose index imports
- * `next/headers`. Keeping this separate means a client component can import it
- * without dragging server-only code into the browser bundle.
- */
-
 export interface RateLimitDisplayPayload {
   code?: string;
   scope?: string;
@@ -30,11 +22,6 @@ function formatDuration(seconds: number): string {
   return `about ${hours} hour${hours === 1 ? "" : "s"}`;
 }
 
-/**
- * Composed on the client on purpose: the server runs in UTC on Render, so only
- * the browser knows what "5:42 PM" means to this user. Runs after a user
- * action, never during SSR, so there is no hydration mismatch.
- */
 export function formatRateLimitMessage(payload: RateLimitDisplayPayload): string {
   const base = payload.message ?? "Rate limit reached.";
   if (!payload.retryAt) return base;

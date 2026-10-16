@@ -104,15 +104,10 @@ export function AgentSandbox() {
       setParsedOutput(parsed);
 
       if (isRateLimited(parsed)) {
-        // No run happened: don't record it in history, and leave agentContext
-        // alone so the user's seller connection survives the block.
         toast.error(formatRateLimitMessage(parsed));
         return;
       }
 
-      // Only a completed run carries an agentContext worth keeping. Assigning
-      // parsed.agentContext unconditionally would clobber good state with
-      // undefined on any non-run response.
       if (parsed?.agentContext) {
         setAgentContext(parsed.agentContext as AgentContext);
       }

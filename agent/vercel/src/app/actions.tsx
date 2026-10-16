@@ -204,9 +204,7 @@ async function runAgent(
     agentContext
   );
 
-  // If new tools are discovered, RE-RUN the agent.
-  // NOTE: this recursion is still ONE user submission. The rate limit is
-  // consumed once, in getAgent, precisely because of this.
+  // If new tools are discovered, RE-RUN the agent
   if (newToolsFound) {
     const modelResponse = JSON.parse(
       await runAgent(apiKey, input, agentContext, formattedSteps)

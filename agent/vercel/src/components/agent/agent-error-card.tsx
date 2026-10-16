@@ -6,14 +6,6 @@ import { Card } from "@/components/ui/card";
 import { CompletionIndicator } from "@/components/completion-indicator";
 import { formatRateLimitMessage, isRateLimited } from "@/lib/rate-limit-message";
 
-/**
- * The output panel's only reachable error UI.
- *
- * The header pill in agent-output-panel.tsx is `hidden md:flex`, and
- * ResponseTab's error branch never renders because renderCustomOutput() always
- * wins for this app's single agent type -- so without this card a blocked
- * request would show an empty panel reading "agent has finished running".
- */
 export function AgentErrorCard({ parsedOutput }: { parsedOutput: unknown }) {
   const payload = (parsedOutput ?? {}) as { message?: string };
   const rateLimited = isRateLimited(parsedOutput);
