@@ -29,7 +29,7 @@ jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 markdown-it-py==4.2.0
 markdownify==1.2.3
-mcp==1.29.0
+mcp==1.30.0
 mdurl==0.1.2
 mpmath==1.3.0
 multidict==6.7.1
