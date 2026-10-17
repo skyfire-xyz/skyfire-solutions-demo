@@ -44,7 +44,7 @@ pydantic==2.11.7
 pydantic-settings==2.10.1
 pydantic_core==2.33.2
 Pygments==2.20.0
-PyJWT==2.13.0
+PyJWT==2.15.0
 python-dotenv==1.2.2
 python-multipart==0.0.31
 referencing==0.36.2
