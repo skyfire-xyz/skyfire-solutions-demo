@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM --platform=linux/amd64 node:20.16.0-alpine3.20 as build
+FROM --platform=linux/amd64 node:24.22.1-alpine3.24 as build
 
 WORKDIR /app
 ARG NPM_TOKEN
@@ -13,7 +13,7 @@ COPY lib lib
 RUN yarn tsc
 RUN yarn install --prod --frozen-lockfile
 
-FROM --platform=linux/amd64 node:20.16.0-alpine3.20
+FROM --platform=linux/amd64 node:24.22.1-alpine3.24
 
 
 RUN apk add --no-cache tini
