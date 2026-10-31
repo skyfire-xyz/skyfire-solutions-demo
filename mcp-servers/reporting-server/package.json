@@ -34,7 +34,7 @@
     "@types/node": "24.0.3",
     "axios": "1.20.0",
     "convict": "6.2.5",
-    "dd-trace": "5.121.0",
+    "dd-trace": "5.131.1",
     "dotenv": "16.5.0",
     "express": "4.22.2",
     "helmet": "8.1.0",
