@@ -7,8 +7,6 @@ export interface HeaderReader {
 }
 
 export type ClientIpSource =
-  | "cf-connecting-ip"
-  | "true-client-ip"
   | "x-forwarded-for"
   | "dev-fallback";
 
@@ -19,12 +17,6 @@ export interface ClientIpResult {
 
 export function resolveClientIp(headers: HeaderReader): ClientIpResult | null {
   const config = getRateLimitConfig();
-
-  const cf = normalizeIp(headers.get("cf-connecting-ip"));
-  if (cf) return { ip: cf, source: "cf-connecting-ip" };
-
-  const trueClient = normalizeIp(headers.get("true-client-ip"));
-  if (trueClient) return { ip: trueClient, source: "true-client-ip" };
 
   const xff = headers.get("x-forwarded-for");
   if (xff) {

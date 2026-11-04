@@ -34,6 +34,16 @@ export async function checkRateLimit(): Promise<RateLimitVerdict> {
   const allowlisted = resolved !== null && config.allowlist.has(resolved.ip);
 
   try {
+    if (resolved && !allowlisted) {
+      const decision = await store.consume(resolved.ip, Date.now(), config.perIp);
+      if (!decision.allowed) {
+        if (decision.justBlocked) {
+          console.warn(`[rate-limit] blocked ${resolved.ip} (${resolved.source})`);
+        }
+        return { allowed: false, retryAt: decision.retryAt, scope: "ip" };
+      }
+    }
+
     if (config.globalEnabled && !allowlisted) {
       const globalDecision = await store.consume(GLOBAL_KEY, Date.now(), config.global);
       if (!globalDecision.allowed) {
@@ -47,15 +57,7 @@ export async function checkRateLimit(): Promise<RateLimitVerdict> {
       return { allowed: true };
     }
 
-    if (allowlisted) return { allowed: true };
-
-    const decision = await store.consume(resolved.ip, Date.now(), config.perIp);
-    if (decision.allowed) return { allowed: true };
-
-    if (decision.justBlocked) {
-      console.warn(`[rate-limit] blocked ${resolved.ip} (${resolved.source})`);
-    }
-    return { allowed: false, retryAt: decision.retryAt, scope: "ip" };
+    return { allowed: true };
   } catch (err) {
     console.error("[rate-limit] store error:", errorMessage(err));
     return { allowed: true };
