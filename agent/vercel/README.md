@@ -39,7 +39,7 @@ This demo agent is available [here](https://data-analyst-agent-demo.skyfire.xyz/
 Run the development server:
 
 ```bash
-yarn start
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
