@@ -44,5 +44,5 @@ Steps to be followed for setting up Ory:
 ## Run the development server:
 
 ```bash
-yarn start
+yarn dev
 ```
