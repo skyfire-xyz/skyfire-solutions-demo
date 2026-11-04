@@ -42,6 +42,15 @@ function ipv6Bucket(ip: string): string | null {
     groups = head;
   }
 
+  if (
+     groups.slice(0, 5).every((g) => Number.parseInt(g, 16) === 0) &&
+     Number.parseInt(groups[5], 16) === 0xffff
+   ) {
+     const high = Number.parseInt(groups[6], 16);
+     const low = Number.parseInt(groups[7], 16);
+     return [high >>> 8, high & 0xff, low >>> 8, low & 0xff].join(".");
+  }
+  
   return (
     groups
       .slice(0, 4)

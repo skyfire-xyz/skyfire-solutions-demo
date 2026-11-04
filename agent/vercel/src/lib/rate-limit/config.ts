@@ -78,7 +78,7 @@ export function getRateLimitConfig(): RateLimitConfig {
     perIp: Object.freeze({
       maxRequests: readInt("RATE_LIMIT_MAX_REQUESTS", FALLBACK.maxRequests, 1),
       windowMs,
-      blockMs: readInt("RATE_LIMIT_BLOCK_MS", FALLBACK.blockMs, 1000),
+      blockMs: readInt("RATE_LIMIT_BLOCK_MS", FALLBACK.blockMs, 0),
     }),
     global: Object.freeze({
       maxRequests: readInt(
