@@ -13,7 +13,7 @@ azure-core==1.38.0
 azure-identity==1.23.1
 azure-search-documents==11.5.3
 azure-storage-blob==12.26.0
-certifi==2025.7.14
+certifi==2026.10.23
 cffi==2.1.1
 charset-normalizer==3.4.2
 click==8.3.3
@@ -36,8 +36,8 @@ mdurl==0.1.2
 msal==1.37.0
 msal-extensions==1.3.1
 openai==1.97.1
-opentelemetry-api==1.35.0
-pillow==12.3.0
+opentelemetry-api==1.45.2
+pillow==13.0.0
 protobuf==5.29.6
 pycparser==2.22
 pydantic==2.11.7
@@ -62,7 +62,7 @@ tqdm==4.67.1
 typer==0.16.0
 typing-inspection==0.4.1
 typing_extensions==4.14.1
-urllib3==2.7.0
+urllib3==2.8.0
 uvicorn==0.35.0
 zipp==3.23.0
 voila==0.5.9
