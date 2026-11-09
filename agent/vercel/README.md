@@ -39,7 +39,13 @@ This demo agent is available [here](https://data-analyst-agent-demo.skyfire.xyz/
 Run the development server:
 
 ```bash
-yarn start
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Rate limiting
+
+This demo is publicly reachable and unauthenticated. To keep it from being drained, requests are rate limited per client IP.
+
+Rate limiting is optional and off by default. If you run your own copy you don't need it; it only turns on when you set the `RATE_LIMIT_*` variables in your environment.

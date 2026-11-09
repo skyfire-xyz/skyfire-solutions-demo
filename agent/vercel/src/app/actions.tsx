@@ -1,12 +1,13 @@
 "use server";
 
 import { openai } from "@ai-sdk/openai";
-import { generateText, jsonSchema, stepCountIs, type StepResult, type ToolSet } from "ai";
+import { generateText, hasToolCall, jsonSchema, stepCountIs, type StepResult, type ToolSet } from "ai";
 import { experimental_createMCPClient } from "@ai-sdk/mcp";
 import { AgentContext } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { isJWT } from "@/lib/utils";
+import { buildRateLimitedPayload, checkRateLimit } from "@/lib/rate-limit";
 
 // LangSmith's model-wrapper API (wrapAISDKModel) was removed in langsmith >=0.8
 // in favor of wrapAISDK/telemetry, and no LangSmith credentials are configured,
@@ -68,7 +69,8 @@ const textConfig: {[key:string]: string} = {
 
 const connectMcpServerTool = {
   "connect-mcp-server-tool": {
-    description: "Connects to the seller MCP server URL. After calling this tool, stop agent execution immediately after.",
+    description:
+      "Installs a seller's MCP server so that the seller's own tools (e.g. account creation, dataset search, pricing, purchase/download) become available to you.",
     inputSchema: jsonSchema({
       type: "object",
       properties: {
@@ -101,7 +103,16 @@ export async function getAgent(
   apiKey: string,
   input: string | Record<string, string>,
   agentContext: AgentContext,
-) {
+): Promise<string> {
+  const verdict = await checkRateLimit();
+  if (!verdict.allowed) {
+    return JSON.stringify(
+      buildRateLimitedPayload(verdict.retryAt, verdict.scope),
+      null,
+      2
+    );
+  }
+
   if(!apiKey)
     apiKey = process.env.SKYFIRE_API_KEY || "";
 
@@ -122,7 +133,7 @@ export async function getAgent(
         {
           role: "system",
           content:
-            "You are an e-commerce buyer agent assisting user to make a purchase. When connect-mcp-server-tool tool is executed, you must stop agent execution immediately-- there should be no subsequent tools executed. Whenever there is a need to create an account, use 123456S$d#d as the password. Remember never to truncate or mutate tokens. Remember do not drop the sps field and colon from JWT tokens because it makes them invalid. Use the Ory version of the service."
+            "You are an e-commerce buyer agent assisting user to make a purchase. Whenever there is a need to create an account, use 123456S$d#d as the password. Remember never to truncate or mutate tokens. Remember do not drop the sps field and colon from JWT tokens because it makes them invalid. Use the Ory version of the service."
             // For the scope of this demo, the agent is instructed to use a static password for account creation and login. As an improvisation in future, the agent could randomly generate a password and store in agent memory and also share it with human using secure password services like 1Password, Keeper etc.
         },
       ],
@@ -172,7 +183,9 @@ async function runAgent(
       system: systemPrompt,
       maxOutputTokens: 8000,
       tools: allTools,
-      stopWhen: stepCountIs(20),
+      // end the run once the seller server is requested; the restart below
+      // mounts it, since tools can't be added mid-run
+      stopWhen: [stepCountIs(20), hasToolCall("connect-mcp-server-tool")],
       messages: nonSystemMessages,
     });
   } finally {
@@ -429,26 +442,22 @@ const checkAndUpdateAgentContextIfMCPConnectionIsInitiated = (
   steps: AIStep[],
   agentContext: AgentContext
 ) => {
-  let newToolsFound = false;
+  // a step can hold several parallel tool calls, so check all of them
+  const connectCall = steps
+    .flatMap((step: AIStep) => step.toolCalls as unknown as ToolCall[])
+    .find((toolCall) => toolCall?.toolName === "connect-mcp-server-tool");
 
-  steps.forEach((step: AIStep) => {
-    const toolCall = step.toolCalls?.[0] as unknown as ToolCall;
+  if (!connectCall) return false;
 
-    if (toolCall && toolCall.toolName === "connect-mcp-server-tool") {
-      const url = toolCall.input["mcpServerUrl"];
+  agentContext.dynamically_mounted_server = [
+    { url: connectCall.input["mcpServerUrl"], headers: {} },
+  ];
 
-       agentContext.dynamically_mounted_server = [{ url: url, headers: {} }];
-
-      agentContext.conversation_history.push({
-        role: "system",
-        content:
-          "You are now connected to the tools provided by the seller MCP server as well, run tools as per input prompt to solve problems step by step.",
-      });
-
-      newToolsFound = true;
-      return;
-    }
+  agentContext.conversation_history.push({
+    role: "system",
+    content:
+      "You are now connected to the tools provided by the seller MCP server as well, run tools as per input prompt to solve problems step by step.",
   });
 
-  return newToolsFound;
+  return true;
 };
