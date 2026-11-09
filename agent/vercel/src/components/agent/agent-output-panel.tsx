@@ -9,6 +9,7 @@ import { TokenCounter } from "@/components/token-counter";
 import { MemoizedReactMarkdown } from "@/components/markdown-renderer";
 import { CompletionIndicator } from "@/components/completion-indicator";
 import { AgentOutputCards } from "@/components/agent/agent-output-cards";
+import { AgentErrorCard } from "@/components/agent/agent-error-card";
 import { Countdown, LoadingState } from "@/components/agent/agent-states";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -203,6 +204,10 @@ export function OutputPanel({
   const renderTabs = () => {
     if (!output) return null;
 
+    if (parsedOutput?.error) {
+      return <AgentErrorCard parsedOutput={parsedOutput} />;
+    }
+
     const customOutput = renderCustomOutput();
     if (customOutput) return customOutput;
 
@@ -254,10 +259,18 @@ export function OutputPanel({
       <div className="flex-none flex items-center justify-between w-full px-4 py-2 border-b border-border/50">
         {!loading && parsedOutput && (
           <CompletionIndicator
-            status={parsedOutput?.error ? "error" : "success"}
+            status={
+              parsedOutput?.code === "rate_limited"
+                ? "warning"
+                : parsedOutput?.error
+                ? "error"
+                : "success"
+            }
             message={
-              parsedOutput?.error
-                ? `Failed to process request ${parsedOutput?.message}`
+              parsedOutput?.code === "rate_limited"
+                ? "Rate limit reached"
+                : parsedOutput?.error
+                ? `Failed to process request ${parsedOutput?.message ?? ""}`
                 : "Tokens"
             }
             className="hidden md:flex items-center mb-0"
