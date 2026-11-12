@@ -26,8 +26,10 @@ jobs:
 
       # Auto-merge package updates (npm/yarn, pip, uv) unless they're a major
       # version. Other ecosystems (GitHub Actions, Docker) wait for a person.
-      # A PR that updates several packages together has no update type, so it
-      # counts as eligible and relies on the required checks.
+      # If Dependabot can't classify an update (common for security fixes that
+      # also bump the parent package), the update type is empty, so it counts as
+      # eligible and relies on the required checks. Grouped updates report their
+      # largest change, so a group with a major still waits.
       - name: Approve and enable auto-merge
         if: >-
           (steps.meta.outputs.package-ecosystem == 'npm_and_yarn'
