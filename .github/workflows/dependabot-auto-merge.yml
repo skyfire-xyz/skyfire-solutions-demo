@@ -9,48 +9,41 @@ on:
       - synchronize
       - reopened
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   auto-merge:
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
-      && github.repository == 'skyfire-xyz/skyfire-solutions-demo'
+    # Only run for pushes Dependabot made. A commit someone else adds to a
+    # Dependabot PR skips this job, and the repo's "dismiss stale approvals"
+    # rule clears any earlier approval.
+    if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Fetch Dependabot metadata
         id: meta
         uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2.5.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Decide eligibility
-        id: gate
-        env:
-          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
-          DEP_TYPE: ${{ steps.meta.outputs.dependency-type }}
-        run: |
-          eligible=false
-          case "$UPDATE_TYPE" in
-            version-update:semver-patch) eligible=true ;;
-            version-update:semver-minor) eligible=true ;;
-          esac
-          echo "eligible=$eligible" >> "$GITHUB_OUTPUT"
-          echo "update=$UPDATE_TYPE dep=$DEP_TYPE eligible=$eligible"
-
+      # Auto-merge package updates (npm/yarn, pip, uv) unless they're a major
+      # version. Other ecosystems (GitHub Actions, Docker) wait for a person.
+      # If Dependabot can't classify an update (common for security fixes that
+      # also bump the parent package), the update type is empty, so it counts as
+      # eligible and relies on the required checks. Grouped updates report their
+      # largest change, so a group with a major still waits.
       - name: Approve and enable auto-merge
-        if: steps.gate.outputs.eligible == 'true'
+        if: >-
+          (steps.meta.outputs.package-ecosystem == 'npm_and_yarn'
+            || steps.meta.outputs.package-ecosystem == 'pip'
+            || steps.meta.outputs.package-ecosystem == 'uv')
+          && steps.meta.outputs.update-type != 'version-update:semver-major'
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Approve the exact commit Dependabot pushed, and only turn on auto-merge
+        # while it's still the head. A later push by someone else relies on the
+        # repo's "dismiss stale approvals" rule to stop the merge.
         run: |
-          gh pr review --approve "$PR_URL"
-          gh pr merge --auto --merge "$PR_URL"
-
-      - name: Label held pull requests
-        if: steps.gate.outputs.eligible != 'true'
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr edit "$PR_URL" --add-label "needs-manual-review"
+          gh api -X POST "repos/$REPO/pulls/$PR/reviews" -f commit_id="$HEAD_SHA" -f event=APPROVE
+          gh pr merge --auto --merge --match-head-commit "$HEAD_SHA" "$PR" --repo "$REPO"
