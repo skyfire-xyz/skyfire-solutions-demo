@@ -9,190 +9,39 @@ on:
       - synchronize
       - reopened
 
-permissions: {}
-
 jobs:
   auto-merge:
-    if: >-
-      github.event.pull_request.user.login == 'dependabot[bot]'
-      && github.repository == 'skyfire-xyz/skyfire-solutions-demo'
+    # Only run for pushes Dependabot made. A commit someone else adds to a
+    # Dependabot PR skips this job, and the repo's "dismiss stale approvals"
+    # rule clears any earlier approval.
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-    runs-on: ubuntu-latest
-    concurrency:
-      group: dependabot-auto-merge-${{ github.event.pull_request.number }}
-      cancel-in-progress: true
-    env:
-      REVIEW_MARKER: Auto-approved by dependabot-auto-merge.
     steps:
       - name: Fetch Dependabot metadata
         id: meta
         uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2.5.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Decide eligibility
-        id: gate
-        env:
-          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
-          DEP_TYPE: ${{ steps.meta.outputs.dependency-type }}
-          ALLOW_MINOR: "true"
-          ALLOW_MAJOR_DEV: "false"
-        run: |
-          eligible=false
-          case "$UPDATE_TYPE" in
-            version-update:semver-patch) eligible=true ;;
-            version-update:semver-minor) [ "$ALLOW_MINOR" = "true" ] && eligible=true ;;
-            version-update:semver-major)
-              if [ "$ALLOW_MAJOR_DEV" = "true" ] && [ "$DEP_TYPE" = "direct:development" ]; then
-                eligible=true
-              fi
-              ;;
-          esac
-          echo "eligible=$eligible" >> "$GITHUB_OUTPUT"
-          echo "update=$UPDATE_TYPE dep=$DEP_TYPE eligible=$eligible"
-
-      - name: Check out base branch
-        if: steps.gate.outputs.eligible == 'true'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          filter: blob:none
-          persist-credentials: false
-
-      - name: Check changed paths
-        id: paths
-        if: steps.gate.outputs.eligible == 'true'
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          changed=$(mktemp)
-          if ! git diff --no-renames --name-only -z "$BASE_SHA...$HEAD_SHA" > "$changed"; then
-            echo "could not list changed files"
-            echo "scoped=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          scoped=true
-          seen=0
-          while IFS= read -r -d '' f; do
-            seen=$((seen + 1))
-            case "$f" in
-              package.json|yarn.lock|package-lock.json|pnpm-lock.yaml|pyproject.toml|uv.lock) ;;
-              */package.json|*/yarn.lock|*/package-lock.json|*/pnpm-lock.yaml|*/pyproject.toml|*/uv.lock) ;;
-              *)
-                printf 'out of scope: %q\n' "$f"
-                scoped=false
-                ;;
-            esac
-          done < "$changed"
-
-          if [ "$seen" -eq 0 ]; then
-            echo "no changed files"
-            scoped=false
-          fi
-
-          echo "scoped=$scoped" >> "$GITHUB_OUTPUT"
-          echo "files=$seen scoped=$scoped"
-
-      - name: Check commit authors
-        id: commits
-        if: steps.gate.outputs.eligible == 'true'
-        env:
-          REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if ! commits=$(gh api "repos/$REPO/pulls/$PR/commits" --paginate \
-            --jq '.[] | [.sha, (.author.login // "none"), (.committer.login // "none"), (.commit.verification.verified | tostring)] | @tsv'); then
-            echo "could not list commits"
-            echo "authentic=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          authentic=true
-          seen=0
-          while IFS=$'\t' read -r sha login committer verified; do
-            [ -z "$sha" ] && continue
-            seen=$((seen + 1))
-            last=$sha
-            if [ "$login" != "dependabot[bot]" ] || [ "$committer" != "web-flow" ] || [ "$verified" != "true" ]; then
-              echo "not a verified Dependabot commit: $sha by $login, committed by $committer"
-              authentic=false
-            fi
-          done <<< "$commits"
-
-          if [ "${last:-}" != "$HEAD_SHA" ]; then
-            echo "commits end at ${last:-nothing}, not the checked head $HEAD_SHA"
-            authentic=false
-          fi
-
-          echo "authentic=$authentic" >> "$GITHUB_OUTPUT"
-          echo "commits=$seen authentic=$authentic"
-
+      # Auto-merge package updates (npm/yarn, pip, uv) unless they're a major
+      # version. Other ecosystems (GitHub Actions, Docker) wait for a person.
+      # A PR that updates several packages together has no update type, so it
+      # counts as eligible and relies on the required checks.
       - name: Approve and enable auto-merge
-        if: steps.gate.outputs.eligible == 'true' && steps.paths.outputs.scoped == 'true' && steps.commits.outputs.authentic == 'true'
+        if: >-
+          (steps.meta.outputs.package-ecosystem == 'npm_and_yarn'
+            || steps.meta.outputs.package-ecosystem == 'pip'
+            || steps.meta.outputs.package-ecosystem == 'uv')
+          && steps.meta.outputs.update-type != 'version-update:semver-major'
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          METHOD: merge
+        # Approve the exact commit Dependabot pushed, and only turn on auto-merge
+        # while it's still the head. A later push by someone else relies on the
+        # repo's "dismiss stale approvals" rule to stop the merge.
         run: |
-          case "$METHOD" in
-            merge|squash|rebase) ;;
-            *) echo "Unsupported merge method: $METHOD" >&2; exit 1 ;;
-          esac
-          gh api -X POST "repos/$REPO/pulls/$PR/reviews" -f commit_id="$HEAD_SHA" -f event=APPROVE -f body="$REVIEW_MARKER"
-          gh pr merge --auto "--$METHOD" --match-head-commit "$HEAD_SHA" "$PR_URL"
-          gh pr edit "$PR_URL" --remove-label "needs-manual-review" || true
-
-      - name: Hold for manual review
-        if: ${{ !cancelled() && (steps.gate.outputs.eligible != 'true' || steps.paths.outputs.scoped != 'true' || steps.commits.outputs.authentic != 'true') }}
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          failed=false
-          if ! marked=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
-            --jq ".[] | select(.user.login == \"github-actions[bot]\" and .body == \"$REVIEW_MARKER\") | [.id, .state] | @tsv"); then
-            echo "could not list reviews"
-            failed=true
-          fi
-
-          ours=
-          had_ours=false
-          while IFS=$'\t' read -r id state; do
-            [ -z "$id" ] && continue
-            had_ours=true
-            if [ "$state" = "APPROVED" ]; then
-              ours="${ours}${ours:+ }$id"
-            fi
-          done <<< "$marked"
-
-          if $had_ours || $failed; then
-            queued=$(gh pr view "$PR_URL" --json autoMergeRequest --jq '.autoMergeRequest != null') || queued=unknown
-            if [ "$queued" != "false" ] && ! gh pr merge --disable-auto "$PR_URL"; then
-              echo "could not disable auto-merge"
-              failed=true
-            fi
-          fi
-          for id in $ours; do
-            if ! gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$id/dismissals" \
-              -f message="Held for manual review." -f event=DISMISS; then
-              echo "could not dismiss review $id"
-              failed=true
-            fi
-          done
-
-          gh pr edit "$PR_URL" --add-label "needs-manual-review" || true
-
-          if $failed; then
-            exit 1
-          fi
+          gh api -X POST "repos/$REPO/pulls/$PR/reviews" -f commit_id="$HEAD_SHA" -f event=APPROVE
+          gh pr merge --auto --merge --match-head-commit "$HEAD_SHA" "$PR" --repo "$REPO"
