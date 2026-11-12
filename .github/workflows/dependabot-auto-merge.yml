@@ -1,8 +1,3 @@
-# Inline copy of skyfire-xyz/github-actions .github/workflows/dependabot-auto-merge.yml
-# at v1.0.2 (ee6d184). GitHub only shares reusable workflows from a private repo
-# with other private repos, so this public repo carries the logic itself.
-# Its inputs are set inline (merge commits, minor updates allowed, dev majors
-# held) so this file stays easy to diff against the shared one. Keep the two in sync.
 name: Dependabot Auto-merge
 
 on:
