@@ -60,7 +60,7 @@ s3transfer==0.19.2
 six==1.17.0
 slack-bolt==1.30.0
 slack-sdk==3.43.0
-soupsieve==2.9.2
+soupsieve==4.0
 sse-starlette==3.4.8
 starlette==1.6.0
 strands-agents==1.52.0
