@@ -55,7 +55,7 @@
     "ts-node": "10.9.2"
   },
   "resolutions": {
-    "**/qs": "6.16.0",
-    "**/@typescript-eslint/typescript-estree/minimatch": "9.0.7"
+    "**/qs": "6.16.2",
+    "**/@typescript-eslint/typescript-estree/minimatch": "11.0.4"
   }
 }
