@@ -36,7 +36,7 @@
     "convict": "6.2.5",
     "dd-trace": "5.131.1",
     "dotenv": "16.5.0",
-    "express": "4.22.2",
+    "express": "4.22.3",
     "helmet": "8.1.0",
     "pino": "9.7.0",
     "pino-datadog-transport": "3.0.6",
@@ -55,7 +55,6 @@
     "ts-node": "10.9.2"
   },
   "resolutions": {
-    "**/qs": "6.16.2",
     "**/@typescript-eslint/typescript-estree/minimatch": "11.0.4"
   }
 }
