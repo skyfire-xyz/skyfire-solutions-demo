@@ -27,7 +27,7 @@
     "build"
   ],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.31.0",
+    "@modelcontextprotocol/sdk": "1.32.0",
     "@ory/client-fetch": "1.20.11",
     "@skyfire-xyz/prettier-config-node": "3.0.0",
     "@skyfire-xyz/tsconfig": "2.0.0",
@@ -35,9 +35,9 @@
     "@types/node": "24.0.3",
     "axios": "1.20.0",
     "convict": "6.2.5",
-    "dd-trace": "6.10.0",
+    "dd-trace": "6.20.1",
     "dotenv": "16.5.0",
-    "express": "4.22.2",
+    "express": "4.22.3",
     "helmet": "8.1.0",
     "jose": "6.0.11",
     "pino": "9.7.0",
@@ -57,7 +57,6 @@
     "ts-node": "10.9.2"
   },
   "resolutions": {
-    "**/qs": "6.16.0",
-    "**/@typescript-eslint/typescript-estree/minimatch": "9.0.7"
+    "**/@typescript-eslint/typescript-estree/minimatch": "11.0.4"
   }
 }
